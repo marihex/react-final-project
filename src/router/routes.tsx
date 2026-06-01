@@ -4,11 +4,13 @@ import {HomePage} from "../pages/HomePage.tsx";
 import {MoviePage} from "../pages/MoviePage.tsx";
 import {GenrePage} from "../pages/GenrePage.tsx";
 import {SearchPage} from "../pages/SearchPage.tsx";
+import {GenresPage} from "../pages/GenresPage.tsx";
 
 export const routes = createBrowserRouter([
     {path:'', element: <MainLayout/>, children: [
             {index: true, element: <HomePage/>},
             {path: '/movie/:movieSlug', element: <MoviePage/>},
+            {path: '/genres', element: <GenresPage/>},
             {path: '/genre/:genreSlug', element: <GenrePage/>},
             {path: '/search', element: <SearchPage/>}
         ]}
