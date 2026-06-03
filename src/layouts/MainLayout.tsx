@@ -1,12 +1,12 @@
-import {MenuComponent} from "../components/menu-component/MenuComponent.tsx";
+import {HeaderComponent} from "../components/header-component/HeaderComponent.tsx";
 import {Outlet} from "react-router-dom";
 
 export const MainLayout = () => {
     return (
-        <>
-        <MenuComponent/>
+        <main className='bg-gray-800'>
+        <HeaderComponent/>
             <hr/>
             <Outlet/>
-        </>
+        </main>
     );
 };
