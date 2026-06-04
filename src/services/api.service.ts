@@ -2,11 +2,6 @@ import {baseUrl} from "../constans/urls.ts";
 import options from "../constans/apiConfig.ts";
 
 
-// fetch('https://api.themoviedb.org/3/discover/movie?include_adult=false&include_video=false&language=en-US&page=1&sort_by=popularity.desc', options)
-//     .then(res => res.json())
-//     .then(res => console.log(res))
-//     .catch(err => console.error(err));
-
 export const getAllMovies = async <T, >(endpoint: string, pg: number | string): Promise<T> => {
     try {
         const separator = endpoint.includes('?') ? '&' : '?';
@@ -26,6 +21,20 @@ export const getAllMovies = async <T, >(endpoint: string, pg: number | string): 
 export const getById = async <T, >(endpoint: string, id: string | number): Promise<T> => {
     try {
         const response = await fetch(`${baseUrl}${endpoint}/${id}`, options)
+        if (!response.ok) throw new Error(`${response.status} Failed to load`);
+        return await response.json();
+    } catch (error) {
+        if (error instanceof Error) {
+            throw new Error(error.message, {cause: error});
+        }
+        throw new Error('Server Error. Unable to load data', {cause: error});
+    }
+}
+
+
+export const getTrending = async <T, >(endpoint: string, timeWindow:string, pg: number | string): Promise<T> => {
+    try {
+        const response = await fetch(`${baseUrl}${endpoint}/${timeWindow}?page=${pg}`, options)
         if (!response.ok) throw new Error(`${response.status} Failed to load`);
         return await response.json();
     } catch (error) {

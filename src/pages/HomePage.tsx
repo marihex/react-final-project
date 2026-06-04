@@ -1,9 +1,9 @@
-import {MovieListComponent} from "../components/movie-list-component/MovieListComponent.tsx";
+import {MovieListComponentMain} from "../components/movie-list-main/MovieListComponentMain.tsx";
 
 export const HomePage = () => {
     return (
         <>
-        <MovieListComponent/>
+        <MovieListComponentMain/>
         </>
     );
 };

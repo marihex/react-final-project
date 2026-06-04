@@ -1,13 +1,19 @@
 import type {IMovieCardModel} from "../../models/IMovieCardModel.ts";
 import {createAsyncThunk, createSlice, isRejected, type PayloadAction} from "@reduxjs/toolkit";
-import {getAllMovies, getById} from "../../services/api.service.ts";
+import {getAllMovies, getById, getTrending} from "../../services/api.service.ts";
 import type {IBaseTmbdModel} from "../../models/IBaseTmbdModel.ts";
 import type {IMovieInfoModel} from "../../models/IMovieInfoModel.ts";
+import type {Dates, IUpcomingModel} from "../../models/IUpcomingModel.ts";
 
 type MovieSliceType = {
     movies: IMovieCardModel[],
     movie: IMovieInfoModel | null,
+    popular: IMovieCardModel[],
+    upcoming: IMovieCardModel[],
+    trending: IMovieCardModel[],
+    dates: Dates | null,
     totalPages: number,
+    totalResults: number,
     loadState: boolean,
     error: string | null,
 }
@@ -15,9 +21,19 @@ type MovieSliceType = {
 const initialState: MovieSliceType = {
     movies: [],
     movie: null,
-    totalPages: 1,
+    popular: [],
+    upcoming: [],
+    trending: [],
+    dates: null,
+    totalPages: 0,
+    totalResults: 0,
     loadState: false,
     error: null,
+}
+
+interface FetchTrendingArgs {
+    timeWindow: 'day' | 'week' | string;
+    page: number | string;
 }
 
 
@@ -36,19 +52,65 @@ const loadMovies = createAsyncThunk(
     }
 )
 
-const loadMovie = createAsyncThunk(
-    'loadMovie',
-    async (id: string | number, thunkAPI) => {
+const loadPopular = createAsyncThunk(
+    'loadPopular',
+    async (page: number | string, thunkAPI) => {
         try {
-            const movie = await getById<IMovieInfoModel>('/movie/', id);
-            return movie;
+            const popular = await getAllMovies<IBaseTmbdModel>('/movie/popular', page);
+            return popular;
         } catch (error) {
             if (error instanceof Error) {
                 return thunkAPI.rejectWithValue(error.message);
             }
             return thunkAPI.rejectWithValue('Unknown server error');
         }
-    })
+    }
+)
+
+const loadUpcoming = createAsyncThunk(
+    'loadUpcoming',
+    async (page: number | string, thunkAPI) => {
+        try {
+            const upcoming = await  getAllMovies<IUpcomingModel>('/movie/upcoming', page)
+            return upcoming;
+        } catch (error) {
+            if (error instanceof Error) {
+                return thunkAPI.rejectWithValue(error.message);
+            }
+            return thunkAPI.rejectWithValue('Unknown server error');
+        }
+    }
+)
+
+const loadTrending = createAsyncThunk <IBaseTmbdModel, FetchTrendingArgs> (
+    'loadTrending',
+    async ({timeWindow, page}, thunkAPI) => {
+        try {
+            const trending = await getTrending<IBaseTmbdModel>('/trending/movie',timeWindow, page)
+            return trending
+        }  catch (error) {
+            if (error instanceof Error) {
+                return thunkAPI.rejectWithValue(error.message);
+            }
+            return thunkAPI.rejectWithValue('Unknown server error');
+        }
+    }
+)
+
+const loadMovie = createAsyncThunk(
+    'loadMovie',
+    async (id:string | number ,thunkAPI) => {
+        try {
+            const movie = await getById<IMovieInfoModel>('/movie', id)
+            return movie
+        } catch (error) {
+            if (error instanceof Error) {
+                return thunkAPI.rejectWithValue(error.message);
+            }
+            return thunkAPI.rejectWithValue('Unknown server error');
+        }
+    }
+)
 
 export const movieSlice = createSlice({
     name: 'movieSlice',
@@ -68,7 +130,8 @@ export const movieSlice = createSlice({
                 state.movies = action.payload.results;
                 state.loadState = false;
                 state.error = null;
-                state.totalPages = action.payload.total_pages
+                state.totalPages = action.payload.total_pages;
+                state.totalResults = action.payload.total_results;
             })
             .addCase(loadMovie.pending, (state) => {
               state.loadState = true;
@@ -79,7 +142,41 @@ export const movieSlice = createSlice({
                 state.loadState = false;
                 state.error = null;
             })
-            .addMatcher(isRejected(loadMovie, loadMovies ), (state, action) => {
+            .addCase(loadPopular.pending, (state) => {
+              state.loadState = true;
+              state.error = null;
+            })
+            .addCase(loadPopular.fulfilled, (state, action: PayloadAction<IBaseTmbdModel>) => {
+                state.popular = action.payload.results;
+                state.loadState = false;
+                state.error = null;
+                state.totalPages = action.payload.total_pages;
+                state.totalResults = action.payload.total_results;
+            })
+            .addCase(loadUpcoming.pending, (state) => {
+                state.loadState = true;
+                state.error = null;
+            })
+            .addCase(loadUpcoming.fulfilled, (state, action: PayloadAction<IUpcomingModel>) => {
+                state.loadState = false;
+                state.upcoming = action.payload.results;
+                state.error = null;
+                state.totalPages = action.payload.total_pages;
+                state.dates = action.payload.dates;
+                state.totalResults = action.payload.total_results;
+            })
+            .addCase(loadTrending.pending, (state) => {
+                state.loadState = true;
+                state.error = null;
+            })
+            .addCase(loadTrending.fulfilled, (state, action: PayloadAction <IBaseTmbdModel>) => {
+                state.loadState = false;
+                state.error = null;
+                state.trending = action.payload.results;
+                state.totalPages = action.payload.total_pages;
+                state.totalResults = action.payload.total_results;
+            })
+            .addMatcher(isRejected(loadMovie, loadMovies, loadPopular, loadUpcoming, loadTrending ), (state, action) => {
                 state.loadState = false;
                 if (typeof action.payload === 'string') {
                     state.error = action.payload;
@@ -91,5 +188,5 @@ export const movieSlice = createSlice({
 })
 
 export const movieActions = {
-    ...movieSlice.actions, loadMovie, loadMovies
+    ...movieSlice.actions, loadMovie, loadMovies, loadPopular, loadUpcoming, loadTrending
 }
