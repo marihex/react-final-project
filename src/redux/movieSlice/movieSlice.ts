@@ -38,7 +38,7 @@ interface FetchTrendingArgs {
     page: number | string;
 }
 
-interface FetchSearchArg {
+export interface FetchSearchArg {
     query: string,
     page: number | string
 }
