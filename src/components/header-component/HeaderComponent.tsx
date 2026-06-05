@@ -1,5 +1,4 @@
 import {Link} from "react-router-dom";
-import {SearchInput} from "../search-input-component/SearchInputComponent.tsx";
 
 export const HeaderComponent = () => {
     return (
@@ -10,12 +9,7 @@ export const HeaderComponent = () => {
                 alt="logo" className='w-52'/>
             </Link>
 
-            <div className='w-96'>
-                {/*<input type="search" id="site-search" name="search" placeholder={'Movie...'}*/}
-                {/*       className='p-2 bg-gray-600 rounded-lg w-96'/>*/}
-                {/*<button className='bg-gray-600 w-24 h-10 ml-3 rounded-lg'>Search</button>*/}
-                <SearchInput/>
-            </div>
+            <Link to={'/search'}>Search the movie</Link>
             <div className='flex items-center justify-between gap-3'>
                 <div className='w-14 h-14 rounded-lg bg-gray-700 flex items-center justify-center'>
                     <img src="../../../public/icons/icons8-notification-24.png" alt="" className='w-5'/>

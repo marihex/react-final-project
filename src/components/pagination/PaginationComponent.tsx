@@ -9,22 +9,25 @@ type PaginationProps = {
 
 const PaginationComponent: FC <PaginationProps> = ({totalPages, currentPage}) => {
 
-    const [,setSearchParams] = useSearchParams();
-    const paginationHandler = ( _: React.ChangeEvent<unknown>, page: number) => {
-        {
-            if (page === 1) {
-                setSearchParams({});
-            } else {
-                setSearchParams({ page: page.toString() });
-            }
-        }
-    }
+    const [searchParams, setSearchParams] = useSearchParams();
+
+    const handlePageChange = (
+        _: React.ChangeEvent<unknown>,
+        page: number
+    ) => {
+        const query = searchParams.get("query") || "";
+
+        setSearchParams({
+            query,
+            page: page.toString(),
+        });
+    };
 
     return (
-        <div>
+        <div className='mt-5 pb-5'>
             <Pagination count={totalPages}
                         page={currentPage}
-                        onChange={paginationHandler}
+                        onChange={handlePageChange}
                         shape={"rounded"}
                         color={"primary"}
                         variant={"outlined"}

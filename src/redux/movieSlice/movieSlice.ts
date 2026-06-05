@@ -1,6 +1,6 @@
 import type {IMovieCardModel} from "../../models/IMovieCardModel.ts";
 import {createAsyncThunk, createSlice, isRejected, type PayloadAction} from "@reduxjs/toolkit";
-import {getAllMovies, getById, getTrending} from "../../services/api.service.ts";
+import {getAllMovies, getById, getTrending, searchMovie} from "../../services/api.service.ts";
 import type {IBaseTmbdModel} from "../../models/IBaseTmbdModel.ts";
 import type {IMovieInfoModel} from "../../models/IMovieInfoModel.ts";
 import type {Dates, IUpcomingModel} from "../../models/IUpcomingModel.ts";
@@ -11,6 +11,7 @@ type MovieSliceType = {
     popular: IMovieCardModel[],
     upcoming: IMovieCardModel[],
     trending: IMovieCardModel[],
+    search: IMovieCardModel[],
     dates: Dates | null,
     totalPages: number,
     totalResults: number,
@@ -24,6 +25,7 @@ const initialState: MovieSliceType = {
     popular: [],
     upcoming: [],
     trending: [],
+    search: [],
     dates: null,
     totalPages: 0,
     totalResults: 0,
@@ -34,6 +36,11 @@ const initialState: MovieSliceType = {
 interface FetchTrendingArgs {
     timeWindow: 'day' | 'week' | string;
     page: number | string;
+}
+
+interface FetchSearchArg {
+    query: string,
+    page: number | string
 }
 
 
@@ -112,6 +119,21 @@ const loadMovie = createAsyncThunk(
     }
 )
 
+const loadSearchMovie = createAsyncThunk<IBaseTmbdModel, FetchSearchArg>(
+    'searchMovie',
+    async ({query, page}, thunkAPI)=> {
+        try {
+            const search = await searchMovie<IBaseTmbdModel>('/search/movie', query, page)
+            return search
+        }  catch (error) {
+            if (error instanceof Error) {
+                return thunkAPI.rejectWithValue(error.message);
+            }
+            return thunkAPI.rejectWithValue('Unknown server error');
+        }
+    }
+)
+
 export const movieSlice = createSlice({
     name: 'movieSlice',
     initialState: initialState,
@@ -176,7 +198,17 @@ export const movieSlice = createSlice({
                 state.totalPages = action.payload.total_pages;
                 state.totalResults = action.payload.total_results;
             })
-            .addMatcher(isRejected(loadMovie, loadMovies, loadPopular, loadUpcoming, loadTrending ), (state, action) => {
+            .addCase(loadSearchMovie.pending, (state) => {
+                state.loadState = true;
+                state.error = null
+            })
+            .addCase(loadSearchMovie.fulfilled, (state, action: PayloadAction <IBaseTmbdModel>) => {
+                state.loadState = false;
+                state.error = null;
+                state.search = action.payload.results;
+                state.totalPages = action.payload.total_pages;
+            })
+            .addMatcher(isRejected(loadMovie, loadMovies, loadPopular, loadUpcoming, loadTrending, loadSearchMovie ), (state, action) => {
                 state.loadState = false;
                 if (typeof action.payload === 'string') {
                     state.error = action.payload;
@@ -188,5 +220,5 @@ export const movieSlice = createSlice({
 })
 
 export const movieActions = {
-    ...movieSlice.actions, loadMovie, loadMovies, loadPopular, loadUpcoming, loadTrending
+    ...movieSlice.actions, loadMovie, loadMovies, loadPopular, loadUpcoming, loadTrending, loadSearchMovie
 }
