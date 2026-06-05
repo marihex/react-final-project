@@ -5,16 +5,18 @@ import type {IBaseTmbdModel} from "../../models/IBaseTmbdModel.ts";
 
 interface SearchState {
     query: string;
-    suggestion: IMovieCardModel[],
+    suggestions: IMovieCardModel[],
     loadState: boolean,
-    error: string | null
+    error: string | null,
+    noResults: boolean
 }
 
 const initialState: SearchState = {
     query: '',
-    suggestion: [],
+    suggestions: [],
     loadState: false,
-    error: null
+    error: null,
+    noResults: false
 }
 
 const loadSuggestions = createAsyncThunk(
@@ -40,11 +42,11 @@ export const searchSlice = createSlice({
             state.query = action.payload;
         },
         clearSuggestions: (state) => {
-            state.suggestion = []
+            state.suggestions = []
         },
         clearSearch: (state) => {
             state.query = '';
-            state.suggestion = [];
+            state.suggestions = [];
             state.error = null;
         }
     },
@@ -53,10 +55,12 @@ export const searchSlice = createSlice({
             .addCase(loadSuggestions.pending, (state) => {
                 state.loadState = true;
                 state.error = null;
+                state.noResults = false;
             })
             .addCase(loadSuggestions.fulfilled, (state, action) => {
                 state.loadState = false;
-                state.suggestion = action.payload
+                state.suggestions = action.payload;
+                state.noResults = action.payload.length === 0;
             })
             .addMatcher(isRejected(loadSuggestions), (state,action) => {
                 state.loadState = false;

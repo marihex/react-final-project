@@ -17,6 +17,7 @@ type MovieSliceType = {
     totalResults: number,
     loadState: boolean,
     error: string | null,
+    noResults: boolean
 }
 
 const initialState: MovieSliceType = {
@@ -31,6 +32,8 @@ const initialState: MovieSliceType = {
     totalResults: 0,
     loadState: false,
     error: null,
+    noResults: false
+
 }
 
 interface FetchTrendingArgs {
@@ -200,13 +203,15 @@ export const movieSlice = createSlice({
             })
             .addCase(loadSearchMovie.pending, (state) => {
                 state.loadState = true;
-                state.error = null
+                state.error = null;
+                state.noResults = false;
             })
             .addCase(loadSearchMovie.fulfilled, (state, action: PayloadAction <IBaseTmbdModel>) => {
                 state.loadState = false;
                 state.error = null;
                 state.search = action.payload.results;
                 state.totalPages = action.payload.total_pages;
+                state.noResults = action.payload.results.length === 0;
             })
             .addMatcher(isRejected(loadMovie, loadMovies, loadPopular, loadUpcoming, loadTrending, loadSearchMovie ), (state, action) => {
                 state.loadState = false;

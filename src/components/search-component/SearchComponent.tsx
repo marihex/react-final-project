@@ -7,7 +7,7 @@ import {MoviesListCardComponent} from "../movie-list-card/MoviesListCardComponen
 import PaginationComponent from "../pagination/PaginationComponent.tsx";
 
 export const SearchComponent = () => {
-    const {search, totalPages, loadState} = useAppSelector(state => state.movies);
+    const {search, totalPages, loadState, noResults} = useAppSelector(state => state.movies);
     const dispatch = useAppDispatch();
 
     const [searchParams] = useSearchParams();
@@ -30,6 +30,13 @@ export const SearchComponent = () => {
     return (
         <div className='search-component'>
             <div className="flex flex-col gap-10 items-center mt-5 pb-5">
+                {
+                    noResults && !loadState && (
+                        <div className="text-center mt-10 text-gray-400">
+                            No movies found 😢
+                        </div>
+                    )
+                }
                     {!!search.length && (
                         <div className="grid grid-cols-4 gap-5 px-20">
                             {search.map(movie => (
