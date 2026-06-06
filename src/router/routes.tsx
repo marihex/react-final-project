@@ -13,8 +13,9 @@ export const routes = createBrowserRouter([
     {path:'', element: <MainLayout/>, children: [
             {index: true, element: <HomePage/>},
             {path: '/movie/:id', element: <MoviePage/>},
-            {path: '/genres', element: <GenresPage/>},
-            {path: '/genre/:id', element: <GenrePage/>},
+            {path: '/genres', element: <GenresPage/> ,children: [
+                    {path: '/movie?with_genres=:id', element: <GenrePage/>}
+                ]},
             {path: '/popular', element: <PopularPage/>},
             {path: '/upcoming', element: <UpcomingPage/>},
             {path: '/trending', element: <TrendingPage/>},

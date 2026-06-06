@@ -49,7 +49,7 @@ interface FetchSearchArg {
 }
 
 interface FetchMoviesWithGenArgs {
-    id: string | number;
+    id: string | number | null;
     page: number | string;
 }
 
@@ -144,7 +144,7 @@ const loadSearchMovie = createAsyncThunk<IBaseTmbdModel, FetchSearchArg>(
     }
 )
 
-const loadMoviesWithGenres = createAsyncThunk<IBaseTmbdModel, FetchMoviesWithGenArgs>(
+export const loadMoviesWithGenres = createAsyncThunk<IBaseTmbdModel, FetchMoviesWithGenArgs>(
     'loadMoviesWithGenres',
     async({id, page}, thunkAPI) => {
         try {
@@ -239,7 +239,7 @@ export const movieSlice = createSlice({
                 state.loadState = true;
                 state.error = null;
             })
-            .addCase(loadMoviesWithGenres.fulfilled, (state, action: PayloadAction<IBaseTmbdModel>) => {
+            .addCase(loadMoviesWithGenres.fulfilled, (state, action) => {
                 state.loadState = false;
                 state.error = null;
                 state.moviesWithGenres = action.payload.results;
@@ -258,5 +258,5 @@ export const movieSlice = createSlice({
 })
 
 export const movieActions = {
-    ...movieSlice.actions, loadMovie, loadMovies, loadPopular, loadUpcoming, loadTrending, loadSearchMovie
+    ...movieSlice.actions, loadMovie, loadMovies, loadPopular, loadUpcoming, loadTrending, loadSearchMovie, loadMoviesWithGenres
 }

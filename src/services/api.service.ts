@@ -45,7 +45,7 @@ export const getTrending = async <T, >(endpoint: string, timeWindow:string, pg: 
     }
 }
 
-export const getByGenres = async <T, >(endpoint: string, pg: number | string, id: string | number): Promise<T> => {
+export const getByGenres = async <T, >(endpoint: string, pg: number | string, id: string | number | null): Promise<T> => {
     try {
         const response = await fetch(`${baseUrl}${endpoint}?with_genres=${id}&page=${pg}`, options)
         if (!response.ok) throw new Error(`${response.status} Failed to load`);
