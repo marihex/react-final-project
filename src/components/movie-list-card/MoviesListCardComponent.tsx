@@ -1,8 +1,8 @@
 import type {FC} from "react";
 import type {IMovieCardModel} from "../../models/IMovieCardModel.ts";
-import {imgBaseUrl, imgSizeUrl} from "../../constans/urls.ts";
+import {imgBaseUrl, imgSizeUrl} from "../../config/urls.ts";
 import {Link} from "react-router-dom";
-import {dateFormatHelper} from "../../constans/dateFormatHelper.ts";
+import {dateFormatHelper} from "../../config/dateFormatHelper.ts";
 
 type MovieProps = {
     movieItem: IMovieCardModel

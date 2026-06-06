@@ -1,5 +1,5 @@
-import {baseUrl} from "../constans/urls.ts";
-import options from "../constans/apiConfig.ts";
+import {baseUrl} from "../config/urls.ts";
+import options from "../config/apiConfig.ts";
 
 
 export const getAllMovies = async <T, >(endpoint: string, pg: number | string): Promise<T> => {
@@ -47,9 +47,7 @@ export const getTrending = async <T, >(endpoint: string, timeWindow:string, pg: 
 
 export const getByGenres = async <T, >(endpoint: string, pg: number | string, id: string | number): Promise<T> => {
     try {
-        const urlWithGenre = `${baseUrl}${endpoint}?with_genres=${id}`;
-        const fullUrl = `${urlWithGenre}&page=${pg}`;
-        const response = await fetch(fullUrl, options)
+        const response = await fetch(`${baseUrl}${endpoint}?with_genres=${id}&page=${pg}`, options)
         if (!response.ok) throw new Error(`${response.status} Failed to load`);
         return await response.json();
 

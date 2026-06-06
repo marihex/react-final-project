@@ -3,7 +3,7 @@ import {useAppDispatch} from "../../redux/hooks/useAppDispatch.ts";
 import {useEffect} from "react";
 import {movieActions} from "../../redux/movieSlice/movieSlice.ts";
 import {useParams} from "react-router-dom";
-import {imgBaseUrl, imgSizeUrl} from "../../constans/urls.ts";
+import {imgBaseUrl, imgSizeUrl} from "../../config/urls.ts";
 
 export const MovieInfoComponent= () => {
     const {movie, error, loadState} = useAppSelector(state => state.movies);

@@ -1,6 +1,6 @@
 import type {IMovieCardModel} from "../../models/IMovieCardModel.ts";
 import {createAsyncThunk, createSlice, isRejected, type PayloadAction} from "@reduxjs/toolkit";
-import {getAllMovies, getById, getTrending, searchMovie} from "../../services/api.service.ts";
+import {getAllMovies, getByGenres, getById, getTrending, searchMovie} from "../../services/api.service.ts";
 import type {IBaseTmbdModel} from "../../models/IBaseTmbdModel.ts";
 import type {IMovieInfoModel} from "../../models/IMovieInfoModel.ts";
 import type {Dates, IUpcomingModel} from "../../models/IUpcomingModel.ts";
@@ -12,6 +12,7 @@ type MovieSliceType = {
     upcoming: IMovieCardModel[],
     trending: IMovieCardModel[],
     search: IMovieCardModel[],
+    moviesWithGenres: IMovieCardModel[],
     dates: Dates | null,
     totalPages: number,
     totalResults: number,
@@ -27,6 +28,7 @@ const initialState: MovieSliceType = {
     upcoming: [],
     trending: [],
     search: [],
+    moviesWithGenres: [],
     dates: null,
     totalPages: 0,
     totalResults: 0,
@@ -41,9 +43,14 @@ interface FetchTrendingArgs {
     page: number | string;
 }
 
-export interface FetchSearchArg {
+interface FetchSearchArg {
     query: string,
     page: number | string
+}
+
+interface FetchMoviesWithGenArgs {
+    id: string | number;
+    page: number | string;
 }
 
 
@@ -137,6 +144,21 @@ const loadSearchMovie = createAsyncThunk<IBaseTmbdModel, FetchSearchArg>(
     }
 )
 
+const loadMoviesWithGenres = createAsyncThunk<IBaseTmbdModel, FetchMoviesWithGenArgs>(
+    'loadMoviesWithGenres',
+    async({id, page}, thunkAPI) => {
+        try {
+            const moviesWithGenres = await getByGenres<IBaseTmbdModel>('/discover/movie', id, page);
+            return moviesWithGenres
+        } catch (error) {
+            if (error instanceof Error) {
+                return thunkAPI.rejectWithValue(error.message);
+            }
+            return thunkAPI.rejectWithValue('Unknown server error');
+        }
+    }
+)
+
 export const movieSlice = createSlice({
     name: 'movieSlice',
     initialState: initialState,
@@ -213,7 +235,18 @@ export const movieSlice = createSlice({
                 state.totalPages = action.payload.total_pages;
                 state.noResults = action.payload.results.length === 0;
             })
-            .addMatcher(isRejected(loadMovie, loadMovies, loadPopular, loadUpcoming, loadTrending, loadSearchMovie ), (state, action) => {
+            .addCase(loadMoviesWithGenres.pending, (state) => {
+                state.loadState = true;
+                state.error = null;
+            })
+            .addCase(loadMoviesWithGenres.fulfilled, (state, action: PayloadAction<IBaseTmbdModel>) => {
+                state.loadState = false;
+                state.error = null;
+                state.moviesWithGenres = action.payload.results;
+                state.totalPages = action.payload.total_pages;
+
+            })
+            .addMatcher(isRejected(loadMovie, loadMovies, loadPopular, loadUpcoming, loadTrending, loadSearchMovie, loadMoviesWithGenres ), (state, action) => {
                 state.loadState = false;
                 if (typeof action.payload === 'string') {
                     state.error = action.payload;
