@@ -49,7 +49,7 @@ interface FetchSearchArg {
 }
 
 interface FetchMoviesWithGenArgs {
-    id: string | number | null;
+    id: string | number;
     page: number | string;
 }
 

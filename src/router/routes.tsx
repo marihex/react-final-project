@@ -4,7 +4,7 @@ import {HomePage} from "../pages/HomePage.tsx";
 import {MoviePage} from "../pages/MoviePage.tsx";
 import {GenrePage} from "../pages/GenrePage.tsx";
 import {SearchPage} from "../pages/SearchPage.tsx";
-import {GenresPage} from "../pages/GenresPage.tsx";
+// import {GenresPage} from "../pages/GenresPage.tsx";
 import {PopularPage} from "../pages/PopularPage.tsx";
 import {UpcomingPage} from "../pages/UpcomingPage.tsx";
 import {TrendingPage} from "../pages/TrendingPage.tsx";
@@ -13,9 +13,8 @@ export const routes = createBrowserRouter([
     {path:'', element: <MainLayout/>, children: [
             {index: true, element: <HomePage/>},
             {path: '/movie/:id', element: <MoviePage/>},
-            {path: '/genres', element: <GenresPage/> ,children: [
-                    {path: '/movie?with_genres=:id', element: <GenrePage/>}
-                ]},
+            // {path: '/genres', element: <GenresPage/>},
+            {path: '/movie/genre/:id', element: <GenrePage/>},
             {path: '/popular', element: <PopularPage/>},
             {path: '/upcoming', element: <UpcomingPage/>},
             {path: '/trending', element: <TrendingPage/>},
