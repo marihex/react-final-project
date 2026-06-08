@@ -6,6 +6,7 @@ import {dateFormatHelper} from "../../config/dateFormatHelper.ts";
 import {PosterComponent} from "../poster/PosterComponent.tsx";
 import './movie-card-style.css'
 import StarIcon from '@mui/icons-material/Star';
+import FavoriteBorderSharpIcon from '@mui/icons-material/FavoriteBorderSharp';
 
 type MovieProps = {
     movieItem: IMovieCardModel
@@ -16,7 +17,12 @@ export const MoviesListCardComponent: FC<MovieProps> = ({movieItem}) => {
 
     return (
         <article className='movie-card'>
-            <div className='movie-card__img'>{
+            <div className='movie-card__img'>
+                <div  className='movie-card__favorite'><FavoriteBorderSharpIcon
+                sx={{'&:hover':{color: 'darkred'}}
+                }
+                /></div>
+                {
                 movieItem.poster_path ?
                     <PosterComponent endpoint={movieItem.poster_path} size={sizeUrl} movieTitle={movieItem.title}/> :
                     <img src="../../../public/images/NoPosterAvailable.jpg" alt="" className='movie-card__no-poster'/>
