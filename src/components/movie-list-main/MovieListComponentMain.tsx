@@ -31,7 +31,7 @@ export const MovieListComponentMain = () => {
             </div>
             <div>
                 {
-                    !loadState && totalPages > 1 && (
+                    !loadState && totalPages > 0 && (
                         <PaginationComponent totalPages={totalPages} currentPage={currentPage}/>
                     )
                 }

@@ -49,7 +49,7 @@ export const SearchComponent = () => {
                     )}
 
                 <div>
-                    {!loadState && totalPages && search.length > 1 && (
+                    {!loadState && totalPages && search.length > 0 && (
                         <PaginationComponent
                             totalPages={totalPages}
                             currentPage={currentPage}

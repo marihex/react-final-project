@@ -4,9 +4,7 @@ import options from "../config/apiConfig.ts";
 
 export const getAllMovies = async <T, >(endpoint: string, pg: number | string): Promise<T> => {
     try {
-        const separator = endpoint.includes('?') ? '&' : '?';
-        const fullUrl = `${baseUrl}${endpoint}${separator}page=${pg}`
-        const response = await fetch(fullUrl, options)
+        const response = await fetch(`${baseUrl}${endpoint}?page=${pg}`, options)
         if (!response.ok) throw new Error(`${response.status} Failed to load`);
         return await response.json();
 

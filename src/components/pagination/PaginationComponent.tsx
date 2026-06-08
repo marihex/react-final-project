@@ -17,10 +17,17 @@ const PaginationComponent: FC <PaginationProps> = ({totalPages, currentPage}) =>
     ) => {
         const query = searchParams.get("query") || "";
 
-        setSearchParams({
-            query,
-            page: page.toString(),
-        });
+        if (query) {
+
+            setSearchParams({
+                query,
+                page: page.toString(),
+            })
+        } else {
+            setSearchParams({
+                page: page.toString(),
+            })
+        }
     };
 
     return (

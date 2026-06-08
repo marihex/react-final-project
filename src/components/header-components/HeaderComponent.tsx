@@ -1,5 +1,6 @@
 import {Link} from "react-router-dom";
 import {HeaderSearchComponent} from "./HeaderSearchComponent.tsx";
+import {MenuComponent} from "./MenuComponent.tsx";
 
 export const HeaderComponent = () => {
     return (
@@ -9,8 +10,7 @@ export const HeaderComponent = () => {
                 src="../../../public/images/blue_short-8e7b30f73a4020692ccca9c88bafe5dcb6f8a62a4c6bc55cd9ba82bb2cd95f6c.svg"
                 alt="logo" className='w-52'/>
             </Link>
-
-            {/*<Link to={'/search'}>Search the movie</Link>*/}
+            <MenuComponent/>
             <HeaderSearchComponent/>
             <div className='flex items-center justify-between gap-3'>
                 <div className='w-14 h-14 rounded-lg bg-gray-700 flex items-center justify-center'>
