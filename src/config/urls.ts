@@ -12,4 +12,4 @@ export const imgSizeUrl = {
     original: "original"
 } as const
 
-export type ImageSize = keyof typeof imgSizeUrl;
+export type ImageUrlSize = keyof typeof imgSizeUrl;

@@ -1,0 +1,39 @@
+.movie-card {
+    color: beige;
+    width: 185px;
+    border-radius: 8px;
+    background-color: rgb(19 19 19 / 0.53);
+}
+
+
+.movie-card__no-poster {
+    width: 154px;
+    height: 231px;
+}
+
+.movie-card__info {
+    display: flex;
+    flex-direction: column;
+    height: 7rem;
+    justify-content: space-around;
+    padding: 0.5rem 0 0.4rem 0.5rem;
+
+}
+
+.movie-card__title {
+    width: 100%;
+    font-size: 0.9rem;
+    letter-spacing: 0.04rem;
+}
+
+.movie-card__release {
+    font-size: 0.7rem;
+    letter-spacing: 0.04rem;
+    color: dimgrey;
+}
+
+.movie-card__ratingCount {
+    font-size: 0.9rem;
+    letter-spacing: 0.04rem;
+    color: dimgrey;
+}
