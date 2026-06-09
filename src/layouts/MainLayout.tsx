@@ -3,9 +3,8 @@ import {Outlet} from "react-router-dom";
 
 export const MainLayout = () => {
     return (
-        <main className='bg-gray-800'>
+        <main className='bg-black'>
         <HeaderComponent/>
-            <hr/>
             <Outlet/>
         </main>
     );

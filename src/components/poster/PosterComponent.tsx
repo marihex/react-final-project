@@ -10,9 +10,9 @@ type PosterProps = {
 export const PosterComponent: FC<PosterProps> = ({size, endpoint, movieTitle}) => {
 
     return (
-        <>
+
             <img src={`${imgBaseUrl}${size}${endpoint}`} alt={`${movieTitle} ${size} poster`} className='rounded-lg'/>
 
-        </>
+
     );
 };

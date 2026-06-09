@@ -4,6 +4,7 @@ import {useAppDispatch} from "../../redux/hooks/useAppDispatch.ts";
 import {searchActions} from "../../redux/searchSlice/searchSlice.ts";
 import {Link, useLocation, useNavigate} from "react-router-dom";
 import {useAppSelector} from "../../redux/hooks/useAppSelector.ts";
+import './search-bar-style.css';
 
 export const HeaderSearchComponent = () => {
     const {suggestions, query, noResults, loadState} = useAppSelector(state => state.search);
@@ -60,43 +61,40 @@ export const HeaderSearchComponent = () => {
     return (
         <>
 
-            <div className='relative'>
+            <div className="search">
                 <form onSubmit={handleSubmit}>
-                    <input type="text"
-                           value={query}
-                           onChange={(e: ChangeEvent<HTMLInputElement>) => dispatch(searchActions.setQuery(e.target.value))}
-                           placeholder='Search Movie...'
-                           className="p-2 bg-gray-600 rounded-lg w-96"
-
+                    <input
+                        type="text"
+                        value={query}
+                        onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                            dispatch(searchActions.setQuery(e.target.value))
+                        }
+                        placeholder="Search movie..."
+                        className="search__input"
                     />
                 </form>
-                {
-                    showNoResults && (
-                        <div className="absolute top-full left-0 right-0 bg-gray-600 text-gray-400">
-                            No movies found 😢
-                        </div>
-                    )
-                }
-                {
-                    showSuggestions && (
-                        <ul className='absolute top-full left-0 right-0 bg-gray-600'>
-                            {
-                                suggestions.map(movie => (
 
-                                    <li key={movie.id}>
-                                        <Link
-                                            onClick={() => dispatch(searchActions.clearSuggestions())}
-                                            to={`/search?query=${encodeURIComponent(movie.title.toLowerCase())}&page=1`}
-                                        >
-                                        {movie.title}
-                                    </Link>
-                                    </li>
+                {showNoResults && (
+                    <div className="search__dropdown search__empty">
+                        No movies found 😢
+                    </div>
+                )}
 
-                                ))
-                            }
-                        </ul>
-                    )
-                }
+                {showSuggestions && (
+                    <ul className="search__dropdown">
+                        {suggestions.map(movie => (
+                            <li key={movie.id}>
+                                <Link
+                                    className="search__item"
+                                    onClick={() => dispatch(searchActions.clearSuggestions())}
+                                    to={`/search?query=${encodeURIComponent(movie.title.toLowerCase())}&page=1`}
+                                >
+                                    {movie.title}
+                                </Link>
+                            </li>
+                        ))}
+                    </ul>
+                )}
             </div>
         </>
     );
