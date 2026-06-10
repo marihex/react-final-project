@@ -35,7 +35,7 @@ header {
 }
 
 .movies__nav {
-    width: 5rem;
+    width: fit-content;
     display: flex;
     flex-direction: column;
 }
@@ -60,7 +60,7 @@ header {
 }
 
 .movies__list {
-    right: 69rem;
+    right: 27rem;
     width: 8rem;
     display: flex;
     flex-direction: column;
@@ -71,6 +71,7 @@ header {
 
 .genres__list {
     width: 25rem;
+    right: 10rem;
    display: grid;
     grid-template-columns: repeat(3, 1fr) ;
     gap: 1rem;;

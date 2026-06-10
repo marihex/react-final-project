@@ -1,0 +1,19 @@
+.carousel-sm__container {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.carousel-sm {
+    display: flex;
+    flex-direction: row;
+    gap: 1rem;
+    margin: 0 auto;
+}
+
+.carousel-sm__nav {
+    display: flex;
+    justify-content: space-between;
+    margin: 0.5rem 4rem;
+}

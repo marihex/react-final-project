@@ -10,28 +10,29 @@ import './carousel.css'
 import {Link} from "react-router-dom";
 
 
-export const CarouselComponent = () => {
-    const {upcoming} = useAppSelector(state => state.movies);
+export const CarouselComponentMain = () => {
+    const {trending} = useAppSelector(state => state.movies);
     const dispatch = useAppDispatch();
     useEffect(() => {
-        dispatch(movieActions.loadUpcoming(1))
+        dispatch(movieActions.loadTrending({page: 1, timeWindow: 'week'}))
     }, []);
-    const movieCarousel = upcoming.slice(0,6)
+    const movieCarousel = trending.slice(0,6)
     const sizeUrl = imgSizeUrl["original"];
     return (
         <section className='w-[60%] m-auto pt-4 overflow-hidden  rounded-lg'>
             {
-                upcoming.length > 0 &&
+                trending.length > 0 &&
                 <CCarousel controls indicators>
                     {movieCarousel.map(movie =>
                         <CCarouselItem className="hero-slide">
-                            <CImage className="d-block w-100  rounded-lg" src={`${imgBaseUrl}${sizeUrl}${movie.backdrop_path}`}
-                                    alt="slide 1"/>
+                            <Link to={`/movie/${movie.id}`}><CImage className="d-block w-100  rounded-lg"
+                                       src={`${imgBaseUrl}${sizeUrl}${movie.backdrop_path}`}
+                                       alt="slide 1"/></Link>
                             <CCarouselCaption className="hero-caption">
                                 <h5><Link to={`/movie/${movie.id}`}>{movie.title}</Link></h5>
                                 <p>{dateFormatHelper(movie.release_date)}</p>
                                 <p><StarIcon
-                                    style={{ color: 'gold' , fontSize: 15}}
+                                    style={{color: 'gold', fontSize: 15}}
                                 /> {movie.vote_average.toFixed(1)}</p>
                             </CCarouselCaption>
                         </CCarouselItem>
