@@ -18,6 +18,7 @@ export const HomePage = () => {
         dispatch(movieActions.loadMoviesWithGenres({page: 1, id: 27}));
         dispatch(movieActions.loadMoviesWithGenres({page: 1, id: 14}));
         dispatch(movieActions.loadMoviesWithGenres({page: 1, id: 16}));
+        dispatch(movieActions.loadMoviesWithGenres({page: 1, id: 18}));
         dispatch(movieActions.loadMoviesWithGenres({page: 1, id: 37}));
         dispatch(movieActions.loadMoviesWithGenres({page: 1, id: 10402}));
     }, [dispatch]);

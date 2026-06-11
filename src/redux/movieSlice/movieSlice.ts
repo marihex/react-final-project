@@ -1,9 +1,8 @@
 import type {IMovieCardModel} from "../../models/IMovieCardModel.ts";
 import {createAsyncThunk, createSlice, isRejected, type PayloadAction} from "@reduxjs/toolkit";
-import {getAllMovies, getByGenres, getById, getTrending, searchMovie} from "../../services/api.service.ts";
+import {getAllMovies, getByGenres, getById, getTrending, getUpcoming, searchMovie} from "../../services/api.service.ts";
 import type {IBaseTmbdModel} from "../../models/IBaseTmbdModel.ts";
 import type {IMovieInfoModel} from "../../models/IMovieInfoModel.ts";
-import type {Dates, IUpcomingModel} from "../../models/IUpcomingModel.ts";
 
 type MovieSliceType = {
     movies: IMovieCardModel[],
@@ -13,7 +12,6 @@ type MovieSliceType = {
     trending: IMovieCardModel[],
     search: IMovieCardModel[],
     moviesWithGenres: Record<number, IMovieCardModel[]>,
-    dates: Dates | null,
     totalPages: number,
     totalResults: number,
     loadState: boolean,
@@ -29,7 +27,6 @@ const initialState: MovieSliceType = {
     trending: [],
     search: [],
     moviesWithGenres: {},
-    dates: null,
     totalPages: 0,
     totalResults: 0,
     loadState: false,
@@ -88,7 +85,7 @@ const loadUpcoming = createAsyncThunk(
     'loadUpcoming',
     async (page: number | string, thunkAPI) => {
         try {
-            const upcoming = await  getAllMovies<IUpcomingModel>('/movie/upcoming', page)
+            const upcoming = await  getUpcoming<IBaseTmbdModel>(page)
             return upcoming;
         } catch (error) {
             if (error instanceof Error) {
@@ -204,12 +201,11 @@ export const movieSlice = createSlice({
                 state.loadState = true;
                 state.error = null;
             })
-            .addCase(loadUpcoming.fulfilled, (state, action: PayloadAction<IUpcomingModel>) => {
+            .addCase(loadUpcoming.fulfilled, (state, action: PayloadAction<IBaseTmbdModel>) => {
                 state.loadState = false;
                 state.upcoming = action.payload.results;
                 state.error = null;
                 state.totalPages = action.payload.total_pages;
-                state.dates = action.payload.dates;
                 state.totalResults = action.payload.total_results;
             })
             .addCase(loadTrending.pending, (state) => {

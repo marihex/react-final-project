@@ -7,7 +7,7 @@ import {useSearchParams} from "react-router-dom";
 import PaginationComponent from "../pagination/PaginationComponent.tsx";
 
 export const UpcomingMoviesComponent = () => {
-    const {upcoming, error, loadState, dates, totalPages} = useAppSelector(state => state.movies);
+    const {upcoming, error, loadState, totalPages} = useAppSelector(state => state.movies);
     const dispatch = useAppDispatch();
     const [searchParams] = useSearchParams();
     const currentPage = Number(searchParams.get("page")) || 1;
@@ -28,9 +28,6 @@ export const UpcomingMoviesComponent = () => {
             )}
             <h1>Upcoming movies</h1>
             <div>
-                {
-                    dates && <h2>{dates.minimum} - {dates.maximum}</h2>
-                }
                 <div className='grid grid-cols-4  gap-3 py-5 px-14'>
                     {
                         upcoming.map(upcomingMovie => <MoviesListCardComponent movieItem={upcomingMovie} key={upcomingMovie.id}/>)
