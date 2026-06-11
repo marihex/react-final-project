@@ -12,7 +12,7 @@ type MovieSliceType = {
     upcoming: IMovieCardModel[],
     trending: IMovieCardModel[],
     search: IMovieCardModel[],
-    moviesWithGenres: IMovieCardModel[],
+    moviesWithGenres: Record<number, IMovieCardModel[]>,
     dates: Dates | null,
     totalPages: number,
     totalResults: number,
@@ -28,7 +28,7 @@ const initialState: MovieSliceType = {
     upcoming: [],
     trending: [],
     search: [],
-    moviesWithGenres: [],
+    moviesWithGenres: {},
     dates: null,
     totalPages: 0,
     totalResults: 0,
@@ -242,7 +242,7 @@ export const movieSlice = createSlice({
             .addCase(loadMoviesWithGenres.fulfilled, (state, action) => {
                 state.loadState = false;
                 state.error = null;
-                state.moviesWithGenres = action.payload.results;
+                state.moviesWithGenres[Number(action.meta.arg.id)] = action.payload.results
                 state.totalPages = action.payload.total_pages;
 
             })

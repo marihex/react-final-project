@@ -45,7 +45,7 @@ export const MoviesWithGenresComponent = () => {
             <section>
                 <div className='grid grid-cols-4  gap-3 py-5 px-14'>
                     {
-                        moviesWithGenres.map(movie => (
+                        (moviesWithGenres[Number(id)] || []).map(movie => (
 
                             <MoviesListCardComponent movieItem={movie} key={movie.id}/>
 

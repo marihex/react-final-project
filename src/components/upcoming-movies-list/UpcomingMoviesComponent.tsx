@@ -12,6 +12,10 @@ export const UpcomingMoviesComponent = () => {
     const [searchParams] = useSearchParams();
     const currentPage = Number(searchParams.get("page")) || 1;
     useEffect(() => {dispatch(movieActions.loadUpcoming(currentPage))},[dispatch, currentPage]);
+
+    // const todayDate = new Date();
+    // const upcomingFiltered = upcoming.filter(movie => new Date(movie.release_date) > todayDate)
+
     return (
         <section className='text-white'>
             {
