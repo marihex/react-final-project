@@ -1,0 +1,18 @@
+.movie__section {
+    color: white;
+    width: 80%;
+    margin: auto;
+    padding-top: 1.5rem;
+
+}
+
+.movie__container {
+    display: flex;
+    gap: 3rem;
+}
+
+.movie__info {
+    display: flex;
+    flex-direction: column;
+}
+

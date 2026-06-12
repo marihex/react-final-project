@@ -29,9 +29,9 @@ export const HomePage = () => {
             <hr/>
 
             <div className='flex flex-col gap-12 pb-5'>
-                <CarouselSmall movies={upcoming} movieCategory={'Upcoming Movies'} endpoint={'/upcoming'}/>
-                <CarouselSmall movies={trending} movieCategory={'Trending Movies'} endpoint={'/trending'}/>
-                <CarouselSmall movies={popular} movieCategory={'Popular Movies'} endpoint={'/popular'}/>
+                <CarouselSmall movies={upcoming} movieCategory={'Upcoming'} endpoint={'/upcoming'}/>
+                <CarouselSmall movies={trending} movieCategory={'Worldwide Trending'} endpoint={'/trending'}/>
+                <CarouselSmall movies={popular} movieCategory={'Popular'} endpoint={'/popular'}/>
                 <CarouselSmall movies={moviesWithGenres[28] || []} movieCategory={'Action'} endpoint={`/movie/genre/28`}/>
                 <CarouselSmall movies={moviesWithGenres[12] || []} movieCategory={'Adventure'} endpoint={'/movie/genre/12'}/>
                 <CarouselSmall movies={moviesWithGenres[18] || []} movieCategory={'Drama'} endpoint={'/movie/genre/18'}/>

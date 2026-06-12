@@ -16,8 +16,10 @@
 .carousel-sm__nav {
     display: flex;
     justify-content: space-between;
-    width: 100%;
+    align-items: center;
+    width: clamp(20rem, 100%, 75rem);
     margin: 0 auto;
+    padding: 0 1rem;
     color: white;
     letter-spacing: 0.02rem;
 }

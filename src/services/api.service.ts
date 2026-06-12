@@ -40,7 +40,7 @@ export const getUpcoming = async <T, >(pg: number | string): Promise<T> => {
 
 export const getById = async <T, >(endpoint: string, id: string | number): Promise<T> => {
     try {
-        const response = await fetch(`${baseUrl}${endpoint}/${id}`, options)
+        const response = await fetch(`${baseUrl}${endpoint}/${id}?append_to_response=release_dates`, options)
         if (!response.ok) throw new Error(`${response.status} Failed to load`);
         return await response.json();
     } catch (error) {

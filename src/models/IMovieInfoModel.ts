@@ -26,27 +26,46 @@ export interface IMovieInfoModel {
     video: boolean
     vote_average: number
     vote_count: number
+    release_dates: ReleaseDates
 }
 
-interface Genre {
+export interface Genre {
     id: number
     name: string
 }
 
-interface ProductionCompany {
+export interface ProductionCompany {
     id: number
     logo_path?: string
     name: string
     origin_country: string
 }
 
-interface ProductionCountry {
+export interface ProductionCountry {
     iso_3166_1: string
     name: string
 }
 
-interface SpokenLanguage {
+export interface SpokenLanguage {
     english_name: string
     iso_639_1: string
     name: string
+}
+
+export interface ReleaseDates {
+    results: Result[]
+}
+
+export interface Result {
+    iso_3166_1: string
+    release_dates: ReleaseDate[]
+}
+
+export interface ReleaseDate {
+    certification: string
+    descriptors: string[]
+    iso_639_1: string
+    note: string
+    release_date: string
+    type: number
 }

@@ -11,11 +11,12 @@ export const MenuComponent = () => {
     const dispatch = useAppDispatch();
     const [movieIsOpen, setMovieIsOpen] = useState(false);
     const [genreIsOpen, setGenreIsOpen] = useState(false);
-    const menuRef = useRef<HTMLUListElement>(null);
-    useClickOutside(menuRef, () => {
+    const movieMenuRef = useRef<HTMLUListElement>(null);
+    const genreMenuRef = useRef<HTMLUListElement>(null);
+    useClickOutside(movieMenuRef, () => {
         setTimeout(() => setMovieIsOpen(false), 50);
     })
-    useClickOutside(menuRef, () => {
+    useClickOutside(genreMenuRef, () => {
         setTimeout(() => setGenreIsOpen(false), 50)
     })
 
@@ -28,7 +29,7 @@ export const MenuComponent = () => {
         <div className='menu'>
             <nav className='movies__nav'>
             <button className='movies__bnt' onClick={() => setMovieIsOpen(!movieIsOpen)}>Movies</button>
-                <ul className={`movies__list ${movieIsOpen ? 'active' : ''}`} ref={menuRef}>
+                <ul className={`movies__list ${movieIsOpen ? 'active' : ''}`} ref={movieMenuRef}>
                     <li className="movie__item"><Link to={'/popular'}>Popular</Link></li>
                     <li className="movie__item"><Link to={'/upcoming'}>Upcoming</Link></li>
                     <li className="movie__item"><Link to={'/trending'}>Trending</Link></li>
@@ -37,7 +38,7 @@ export const MenuComponent = () => {
 
             <nav className='genres__nav'>
                 <button className='genres__btn' onClick={() => setGenreIsOpen(!genreIsOpen)}>Genres</button>
-                <ul className={`genres__list ${genreIsOpen ? 'active' : ''}`} ref={menuRef}>
+                <ul className={`genres__list ${genreIsOpen ? 'active' : ''}`} ref={genreMenuRef}>
                     {
                         genres && genres.map(genre => (<li key={genre.id} className='genres__item'><Link to={`/movie/genre/${genre.id}`}>{genre.name}</Link></li>))
                     }

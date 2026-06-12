@@ -41,26 +41,32 @@ header {
 }
 
 
+.movies__nav, .genres__nav {
+    position: relative;
+}
+
 .movies__list,
 .genres__list {
     position: absolute;
     top: calc(100% + 1rem);
+    left: 30%;
     border: 1px solid rgba(255,255,255,.08);
     border-radius: 0.75rem;
     padding: 1rem;
     background: rgb(17 24 39 / 95%);
     backdrop-filter: blur(16px);
-    box-shadow:
-            0 10px 30px rgba(0,0,0,.35);
+    box-shadow: 0 10px 30px rgba(0,0,0,.35);
     opacity: 0;
     visibility: hidden;
-    transform: translateY(-10px);
+    transform: translateX(-30%) translateY(-10px);
     transition: all .25s ease;
     z-index: 100;
+    margin-top: 0.5rem;
 }
 
 .movies__list {
-    right: 27rem;
+    right: 0;
+    left: 0;
     width: 8rem;
     display: flex;
     flex-direction: column;
@@ -71,14 +77,16 @@ header {
 
 .genres__list {
     width: 25rem;
-    right: 10rem;
+    right: 0;
+    left: 0;
    display: grid;
     grid-template-columns: repeat(3, 1fr) ;
     gap: 1rem;;
 }
 
-.movies__list.active, .genres__list.active {
-    transform: translateY(0);
+.movies__list.active,
+.genres__list.active {
+    transform: translateX(-30%) translateY(0);
     opacity: 1;
     visibility: visible;
 }
