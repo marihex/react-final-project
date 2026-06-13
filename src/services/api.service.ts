@@ -52,9 +52,22 @@ export const getById = async <T, >(endpoint: string, id: string | number): Promi
 }
 
 
-export const getTrending = async <T, >(endpoint: string, timeWindow:string, pg: number | string): Promise<T> => {
+export const getTrending = async <T, >(endpoint: string, timeWindow: string, pg: number | string): Promise<T> => {
     try {
         const response = await fetch(`${baseUrl}${endpoint}/${timeWindow}?page=${pg}`, options)
+        if (!response.ok) throw new Error(`${response.status} Failed to load`);
+        return await response.json();
+    } catch (error) {
+        if (error instanceof Error) {
+            throw new Error(error.message, {cause: error});
+        }
+        throw new Error('Server Error. Unable to load data', {cause: error});
+    }
+}
+
+export const getSimilarRecommendations = async <T, >( id: number | string, endpoint: string, pg: number | string): Promise<T> => {
+    try {
+        const response = await fetch(`${baseUrl}/movie/${id}${endpoint}?page=${pg}`, options)
         if (!response.ok) throw new Error(`${response.status} Failed to load`);
         return await response.json();
     } catch (error) {

@@ -15,5 +15,5 @@ export function getReleaseDateForRegion(movieData: IMovieInfoModel, targetRegion
         return fullDate.split('T')[0];
     }
 
-    return "No Data Found";
+    return "";
 }
