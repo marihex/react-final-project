@@ -155,7 +155,7 @@ export const MovieInfoComponent = () => {
                                         movieCategory={`If you liked ${movie.title}, you might also like...`}
                                         endpoint={'/'}/> : []}
                         {recommendations.length > 0 ?
-                            <CarouselSmall movies={recommendations || []} movieCategory={'Also Recommended'}
+                            <CarouselSmall movies={recommendations} movieCategory={'Also Recommended'}
                                         endpoint={'/'}/> : []
                         }
                     </div>}
