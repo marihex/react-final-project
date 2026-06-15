@@ -4,14 +4,16 @@ import {useAppSelector} from "../redux/hooks/useAppSelector.ts";
 import {useAppDispatch} from "../redux/hooks/useAppDispatch.ts";
 import {useEffect} from "react";
 import {movieActions} from "../redux/movieSlice/movieSlice.ts";
+import {filterActions} from "../redux/filterSlice/filterSlice.ts";
 
 export const HomePage = () => {
-    const {popular, trending, upcoming, moviesWithGenres} = useAppSelector(state => state.movies);
+    const { trending, moviesWithGenres} = useAppSelector(state => state.movies);
+    const {sortedUpcoming, sortedMovies} = useAppSelector(state => state.sorted)
     const dispatch = useAppDispatch();
     useEffect(() => {
-        dispatch(movieActions.loadPopular(1));
+        // dispatch(movieActions.loadPopular(1));
         dispatch(movieActions.loadTrending({page: 1, timeWindow: 'week'}));
-        dispatch(movieActions.loadUpcoming(1));
+        dispatch(filterActions.loadSortedUpcoming({page: 1, sort: 'primary_release_date.desc'}));
         dispatch(movieActions.loadMoviesWithGenres({page: 1, id: 28}));
         dispatch(movieActions.loadMoviesWithGenres({page: 1, id: 12}));
         dispatch(movieActions.loadMoviesWithGenres({page: 1, id: 35}));
@@ -29,9 +31,9 @@ export const HomePage = () => {
             <hr/>
 
             <div className='flex flex-col gap-12 pb-5'>
-                <CarouselSmall movies={upcoming} movieCategory={'Upcoming'} endpoint={'/upcoming'}/>
+                <CarouselSmall movies={sortedUpcoming} movieCategory={'Upcoming'} endpoint={'/upcoming'}/>
                 <CarouselSmall movies={trending} movieCategory={'Worldwide Trending'} endpoint={'/trending'}/>
-                <CarouselSmall movies={popular} movieCategory={'Popular'} endpoint={'/popular'}/>
+                <CarouselSmall movies={sortedMovies} movieCategory={'Popular'} endpoint={'/popular'}/>
                 <CarouselSmall movies={moviesWithGenres[28] || []} movieCategory={'Action'} endpoint={`/movie/genre/28`}/>
                 <CarouselSmall movies={moviesWithGenres[12] || []} movieCategory={'Adventure'} endpoint={'/movie/genre/12'}/>
                 <CarouselSmall movies={moviesWithGenres[18] || []} movieCategory={'Drama'} endpoint={'/movie/genre/18'}/>

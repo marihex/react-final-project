@@ -6,7 +6,6 @@ import {
     getById,
     getSimilarRecommendations,
     getTrending,
-    getUpcoming,
     searchMovie
 } from "../../services/api.service.ts";
 import type {IBaseTmbdModel} from "../../models/IBaseTmbdModel.ts";
@@ -15,8 +14,6 @@ import type {IMovieInfoModel} from "../../models/IMovieInfoModel.ts";
 type MovieSliceType = {
     movies: IMovieCardModel[],
     movie: IMovieInfoModel | null,
-    popular: IMovieCardModel[],
-    upcoming: IMovieCardModel[],
     trending: IMovieCardModel[],
     search: IMovieCardModel[],
     moviesWithGenres: Record<number, IMovieCardModel[]>,
@@ -32,8 +29,6 @@ type MovieSliceType = {
 const initialState: MovieSliceType = {
     movies: [],
     movie: null,
-    popular: [],
-    upcoming: [],
     trending: [],
     search: [],
     moviesWithGenres: {},
@@ -69,36 +64,6 @@ const loadMovies = createAsyncThunk(
         try {
             const movies = await getAllMovies<IBaseTmbdModel>('/discover/movie', page);
             return movies;
-        } catch (error) {
-            if (error instanceof Error) {
-                return thunkAPI.rejectWithValue(error.message);
-            }
-            return thunkAPI.rejectWithValue('Unknown server error');
-        }
-    }
-)
-
-const loadPopular = createAsyncThunk(
-    'loadPopular',
-    async (page: number | string, thunkAPI) => {
-        try {
-            const popular = await getAllMovies<IBaseTmbdModel>('/movie/popular', page);
-            return popular;
-        } catch (error) {
-            if (error instanceof Error) {
-                return thunkAPI.rejectWithValue(error.message);
-            }
-            return thunkAPI.rejectWithValue('Unknown server error');
-        }
-    }
-)
-
-const loadUpcoming = createAsyncThunk(
-    'loadUpcoming',
-    async (page: number | string, thunkAPI) => {
-        try {
-            const upcoming = await getUpcoming<IBaseTmbdModel>(page)
-            return upcoming;
         } catch (error) {
             if (error instanceof Error) {
                 return thunkAPI.rejectWithValue(error.message);
@@ -157,7 +122,7 @@ const loadMoviesWithGenres = createAsyncThunk<IBaseTmbdModel, FetchMoviesWithIdA
     'loadMoviesWithGenres',
     async ({id, page}, thunkAPI) => {
         try {
-            const moviesWithGenres = await getByGenres<IBaseTmbdModel>('/discover/movie', id, page);
+            const moviesWithGenres = await getByGenres<IBaseTmbdModel>( id, page);
             return moviesWithGenres
         } catch (error) {
             if (error instanceof Error) {
@@ -228,28 +193,6 @@ export const movieSlice = createSlice({
                 state.loadState = false;
                 state.error = null;
             })
-            .addCase(loadPopular.pending, (state) => {
-                state.loadState = true;
-                state.error = null;
-            })
-            .addCase(loadPopular.fulfilled, (state, action: PayloadAction<IBaseTmbdModel>) => {
-                state.popular = action.payload.results;
-                state.loadState = false;
-                state.error = null;
-                state.totalPages = action.payload.total_pages;
-                state.totalResults = action.payload.total_results;
-            })
-            .addCase(loadUpcoming.pending, (state) => {
-                state.loadState = true;
-                state.error = null;
-            })
-            .addCase(loadUpcoming.fulfilled, (state, action: PayloadAction<IBaseTmbdModel>) => {
-                state.loadState = false;
-                state.upcoming = action.payload.results;
-                state.error = null;
-                state.totalPages = action.payload.total_pages;
-                state.totalResults = action.payload.total_results;
-            })
             .addCase(loadTrending.pending, (state) => {
                 state.loadState = true;
                 state.error = null;
@@ -304,7 +247,7 @@ export const movieSlice = createSlice({
                 state.recommendations = action.payload.results;
                 state.totalPages = action.payload.total_pages;
             })
-            .addMatcher(isRejected(loadMovie, loadMovies, loadPopular, loadUpcoming, loadTrending, loadSearchMovie, loadMoviesWithGenres, loadSimilarMovies, loadRecommendations), (state, action) => {
+            .addMatcher(isRejected(loadMovie, loadMovies, loadTrending, loadSearchMovie, loadMoviesWithGenres, loadSimilarMovies, loadRecommendations), (state, action) => {
                 state.loadState = false;
                 if (typeof action.payload === 'string') {
                     state.error = action.payload;
@@ -319,8 +262,6 @@ export const movieActions = {
     ...movieSlice.actions,
     loadMovie,
     loadMovies,
-    loadPopular,
-    loadUpcoming,
     loadTrending,
     loadSearchMovie,
     loadMoviesWithGenres,
