@@ -4,7 +4,6 @@ import {HomePage} from "../pages/HomePage.tsx";
 import {MoviePage} from "../pages/MoviePage.tsx";
 import {GenrePage} from "../pages/GenrePage.tsx";
 import {SearchPage} from "../pages/SearchPage.tsx";
-// import {GenresPage} from "../pages/GenresPage.tsx";
 import {PopularPage} from "../pages/PopularPage.tsx";
 import {UpcomingPage} from "../pages/UpcomingPage.tsx";
 import {TrendingPage} from "../pages/TrendingPage.tsx";

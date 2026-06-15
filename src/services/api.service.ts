@@ -121,3 +121,17 @@ export const searchMovie = async <T, >(endpoint: string, query: string, pg: numb
 }
 
 
+
+export const getSorted = async <T, >(pg: number | string, sortParam: string): Promise<T> => {
+    try {
+        const response = await fetch(`${baseUrl}$/discover/movie?page=${pg}&region=UA&with_release_type=3&sort_by=${sortParam}`, options)
+        if (!response.ok) throw new Error(`${response.status} Failed to load`);
+        return await response.json();
+
+    } catch (error) {
+        if (error instanceof Error) {
+            throw new Error(error.message, {cause: error});
+        }
+        throw new Error('Server Error. Unable to load data', {cause: error});
+    }
+}

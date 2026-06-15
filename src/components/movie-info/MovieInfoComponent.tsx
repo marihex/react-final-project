@@ -135,11 +135,11 @@ export const MovieInfoComponent = () => {
             <section className='production__section'> {
                 movie &&
                 <div className='production__info flex gap-5'>
-                    {movie.budget ? <span><span className='font-bold'>Budget:</span> ${movie.budget}</span> : ''}
-                    {movie.revenue ? <span><span className='font-bold'>Revenue</span>: ${movie.revenue}</span> : ''}
+                    {movie.budget ? <span><span className='font-bold'>Budget:</span> ${movie.budget}</span> : <span><span className='font-bold'>Budget:</span> - </span>}
+                    {movie.revenue ? <span><span className='font-bold'>Revenue:</span> ${movie.revenue}</span> : <span><span className='font-bold'>Revenue:</span> - </span> }
                     <span><span className='font-bold'>Status:</span> {movie.status}</span>
                     <div><span className='font-bold'>Country:</span> {
-                        movie.origin_country.map(country => <span className='mr-1'>{country},</span> )
+                        movie.origin_country.map(country => <span className='mr-1'>{country} </span> )
                        }</div>
 
                     <span className='flex items-center gap-1'> <PublicIcon fontSize='small'/><Link

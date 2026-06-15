@@ -1,39 +1,18 @@
-import {useAppSelector} from "../../redux/hooks/useAppSelector.ts";
-import {useAppDispatch} from "../../redux/hooks/useAppDispatch.ts";
-import {useEffect} from "react";
-import {movieActions} from "../../redux/movieSlice/movieSlice.ts";
+import {type FC} from "react";
 import {MoviesListCardComponent} from "../movie-list-card/MoviesListCardComponent.tsx";
-import {useSearchParams} from "react-router-dom";
-import PaginationComponent from "../pagination/PaginationComponent.tsx";
+import type {IMovieCardModel} from "../../models/IMovieCardModel.ts";
 
-export const MovieListComponentMain = () => {
-    const {movies, loadState, error, totalPages } = useAppSelector(state => state.movies);
-    const dispatch = useAppDispatch();
-    const [searchParams] = useSearchParams();
-    const currentPage = Number(searchParams.get("page")) || 1;
-    useEffect(() => {
-        dispatch(movieActions.loadMovies(currentPage))
-    }, [dispatch, currentPage]);
+type MoviesListProps = {
+    movies: IMovieCardModel[]
+}
+
+export const MovieListComponentMain: FC<MoviesListProps> = ({movies}) => {
+
     return (
         <section>
-            {
-                loadState && <div className='text-2xl'>Loading...</div>
-            }
-            {error && (
-                <div className='text-red-500 text-xl'>
-                    Error: {error}
-                </div>
-            )}
             <div className='grid grid-cols-4  gap-3 py-5 px-14'>
                 {
-                movies.map(movie => <MoviesListCardComponent movieItem={movie} key={movie.id}/>)
-            }
-            </div>
-            <div>
-                {
-                    !loadState && totalPages > 0 && (
-                        <PaginationComponent totalPages={totalPages} currentPage={currentPage}/>
-                    )
+                    movies.map(movie => <MoviesListCardComponent movieItem={movie} key={movie.id}/>)
                 }
             </div>
         </section>
