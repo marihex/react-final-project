@@ -2,7 +2,7 @@ import {useAppSelector} from "../../redux/hooks/useAppSelector.ts";
 import {useAppDispatch} from "../../redux/hooks/useAppDispatch.ts";
 import {useEffect} from "react";
 import {movieActions} from "../../redux/movieSlice/movieSlice.ts";
-import {useSearchParams} from "react-router-dom";
+import {Link, useSearchParams} from "react-router-dom";
 import {MoviesListCardComponent} from "../movie-list-card/MoviesListCardComponent.tsx";
 import PaginationComponent from "../pagination/PaginationComponent.tsx";
 
@@ -40,10 +40,10 @@ export const SearchComponent = () => {
                     {!!search.length && (
                         <div className="grid grid-cols-4 gap-5 px-20">
                             {search.map(movie => (
-                                <MoviesListCardComponent
+                                <Link to={`/movie/${movie.id}`}><MoviesListCardComponent
                                     key={movie.id}
                                     movieItem={movie}
-                                />
+                                /></Link>
                             ))}
                         </div>
                     )}

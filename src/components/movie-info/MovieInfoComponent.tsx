@@ -3,10 +3,9 @@ import {useAppDispatch} from "../../redux/hooks/useAppDispatch.ts";
 import {useEffect} from "react";
 import {movieActions} from "../../redux/movieSlice/movieSlice.ts";
 import {Link, useParams} from "react-router-dom";
-import {imgSizeUrl} from "../../config/urls.ts";
+import {imgBaseUrl, imgSizeUrl} from "../../config/urls.ts";
 import {Chip, Rating} from "@mui/material";
 import {StarBorder} from "@mui/icons-material";
-import {PosterComponent} from "../poster/PosterComponent.tsx";
 import './movie-info-style.css'
 import {dateFormatHelper} from "../../config/dateFormatHelper.ts";
 import {convertMinutesToHM} from "../../config/minutesConvertHelper.ts";
@@ -41,7 +40,7 @@ export const MovieInfoComponent = () => {
     const regionLabel = releaseDateRaw ? "(UA)" : '(Worldwide)';
 
     return (
-        <>
+        <main className='pb-14'>
             <section className='movie__section'>
                 {
                     loadState && <div className='text-2xl'>Loading...</div>
@@ -63,10 +62,9 @@ export const MovieInfoComponent = () => {
 
                         <div className='movie__card'>
                             {movie.poster_path ?
-                                <PosterComponent size={sizeUrl} endpoint={movie.poster_path}
-                                                 movieTitle={movie.title}/> :
-                                <img src="../../../public/images/NoPosterAvailable.jpg" alt=""
-                                     className='w-[342px] h-[513px]'/>
+                                <img src={`${imgBaseUrl}${sizeUrl}${movie.poster_path}`}
+                                  alt={`${movie.title} ${sizeUrl} poster`} className='rounded-lg h-[513px] w-[342px]'/> :
+                                <img src="../../../public/images/NoPosterAvailable.jpg" alt="" className='h-[513px] w-[342px]'/>
                             }
                             <div className='movie__info'>
                                 <div className='mb-2'>
@@ -160,6 +158,6 @@ export const MovieInfoComponent = () => {
                         }
                     </div>}
             </section>
-        </>
+        </main>
     );
 };

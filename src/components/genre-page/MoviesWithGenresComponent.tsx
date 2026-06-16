@@ -3,7 +3,7 @@ import {useAppSelector} from "../../redux/hooks/useAppSelector.ts";
 import {useAppDispatch} from "../../redux/hooks/useAppDispatch.ts";
 import {movieActions} from "../../redux/movieSlice/movieSlice.ts";
 import {MoviesListCardComponent} from "../movie-list-card/MoviesListCardComponent.tsx";
-import {useParams, useSearchParams} from "react-router-dom";
+import {Link, useParams, useSearchParams} from "react-router-dom";
 import {genreActions} from "../../redux/genreSlice/genreSlice.ts";
 import PaginationComponent from "../pagination/PaginationComponent.tsx";
 import '../../pages/movies-page-styles.css'
@@ -67,10 +67,10 @@ export const MoviesWithGenresComponent = () => {
                             Number(id) === genre.id ? <h1 className='movies__title'>{genre.name}</h1> : ''
                         )
                     }
-                    <ul className='grid grid-cols-5 gap-3'>
+                    <ul className='grid grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-4'>
                         {
-                            currentMovies.map(movie => (
-                                <li key={movie.id}><MoviesListCardComponent movieItem={movie}/></li>
+                            currentMovies.filter(movie => movie.poster_path).map(movie => (
+                                <li key={movie.id}><Link to={`/movie/${movie.id}`}><MoviesListCardComponent movieItem={movie}/></Link></li>
 
                             ))
 

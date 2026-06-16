@@ -1,0 +1,45 @@
+.footer__container{
+    width:  100%;
+    height: fit-content;
+    background-color: #0f172a;
+    padding: 2rem 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8rem;
+    color: beige;
+    font-weight: 600;
+    font-size: 0.95rem;
+    letter-spacing: 0.03rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    margin-top: 3rem;
+}
+
+.footer__links {
+    display: flex;
+    align-items: start;
+    gap: 5rem;
+}
+
+.footer__genres {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr) ;
+    gap: 0.5rem;;
+}
+
+.footer__movies {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    align-items: start;
+}
+
+.footer__container ul {
+    padding-inline-start: 0;
+}
+
+.footer__genres__container {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}

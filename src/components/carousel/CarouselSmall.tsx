@@ -4,7 +4,7 @@ import {MoviesListCardComponent} from "../movie-list-card/MoviesListCardComponen
 import ArrowRightAltIcon from '@mui/icons-material/ArrowRightAlt';
 import KeyboardBackspaceIcon from '@mui/icons-material/KeyboardBackspace';
 import './small-carousel-style.css'
-import {useNavigate} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 
 type SmallCarouselProps = {
     movies: IMovieCardModel [];
@@ -52,7 +52,8 @@ export const CarouselSmall: FC<SmallCarouselProps> = ({movies, movieCategory, en
 
             <div className='carousel-sm'>
                 {
-                    moviesForCarousel.map(movie => <MoviesListCardComponent movieItem={movie} key={movie.id}/>)
+                    moviesForCarousel.map(movie => <Link to={`/movie/${movie.id}`}><MoviesListCardComponent movieItem={movie}
+                                                                                  key={movie.id}/></Link>)
                 }
             </div>
 

@@ -13,6 +13,7 @@
 
 .movie-card__img {
     position: relative;
+    height: 278px;
 }
 
 .movie-card__favorite {

@@ -9,7 +9,7 @@
 
 .movies__content {
     display: flex;
-    gap: 5rem;
+    gap: 3.5rem;
 }
 
 .movies__title {

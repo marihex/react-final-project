@@ -10,7 +10,7 @@ export const HeaderComponent = () => {
             <Link to={'/'}>
                 <img
                 src="../../../public/images/blue_short-8e7b30f73a4020692ccca9c88bafe5dcb6f8a62a4c6bc55cd9ba82bb2cd95f6c.svg"
-                alt="logo" className='w-52'/>
+                alt="logo" className='w-40'/>
             </Link>
             <HeaderSearchComponent/>
             <MenuComponent/>
