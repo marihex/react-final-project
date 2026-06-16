@@ -3,7 +3,7 @@ import {useAppDispatch} from "../redux/hooks/useAppDispatch.ts";
 import {useSearchParams} from "react-router-dom";
 import {useEffect} from "react";
 import {MovieListComponentMain} from "../components/movie-list-main/MovieListComponentMain.tsx";
-import {filterActions} from "../redux/filterSlice/filterSlice.ts";
+import {filterActions} from "../redux/sortSlice/sortSlice.ts";
 import {SortComponent} from "../components/sort-component/SortComponent.tsx";
 import './movies-page-styles.css'
 

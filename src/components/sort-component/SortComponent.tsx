@@ -1,6 +1,6 @@
 import { useAppDispatch } from "../../redux/hooks/useAppDispatch.ts";
 import { useAppSelector } from "../../redux/hooks/useAppSelector.ts";
-import {filterActions} from "../../redux/filterSlice/filterSlice.ts";
+import {filterActions} from "../../redux/sortSlice/sortSlice.ts";
 import { sortHelper } from "../../config/sortHelper.ts";
 import './sort-styles.css'
 

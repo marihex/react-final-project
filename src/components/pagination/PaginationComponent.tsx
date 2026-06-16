@@ -32,7 +32,7 @@ const PaginationComponent: FC <PaginationProps> = ({totalPages, currentPage}) =>
 
     return (
         <div className='mt-5 pb-5'>
-            <Pagination count={totalPages}
+            <Pagination count={totalPages > 500 ? 500 : totalPages} // API ne pidtrumue storinku bil`she 500
                         page={currentPage}
                         onChange={handlePageChange}
                         shape={"rounded"}

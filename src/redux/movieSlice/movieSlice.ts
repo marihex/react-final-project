@@ -1,7 +1,6 @@
 import type {IMovieCardModel} from "../../models/IMovieCardModel.ts";
 import {createAsyncThunk, createSlice, isFulfilled, isPending, isRejected, type PayloadAction} from "@reduxjs/toolkit";
 import {
-    getAllMovies,
     getByGenres,
     getById,
     getSimilarRecommendations,
@@ -58,12 +57,7 @@ interface FetchMoviesWithIdAndPg {
     id: string | number;
 }
 
-const loadMovies = createAsyncThunk(
-    'loadMovies',
-    async (page: number | string, thunkAPI) => {
-        return await loadData(() => getAllMovies<IBaseTmbdModel>('/discover/movie', page), thunkAPI);
-    }
-)
+
 
 const loadTrending = createAsyncThunk<IBaseTmbdModel, FetchTrendingArgs>(
     'loadTrending',
@@ -121,12 +115,6 @@ export const movieSlice = createSlice({
             .addCase(loadSearchMovie.pending, (state) => {
                 state.noResults = false;
             })
-
-            .addCase(loadMovies.fulfilled, (state, action: PayloadAction<IBaseTmbdModel>) => {
-                state.movies = action.payload.results;
-                state.totalPages = action.payload.total_pages;
-                state.totalResults = action.payload.total_results;
-            })
             .addCase(loadMovie.fulfilled, (state, action: PayloadAction<IMovieInfoModel>) => {
                 state.movie = action.payload;
             })
@@ -154,7 +142,7 @@ export const movieSlice = createSlice({
             })
             .addMatcher(
                 isPending(
-                    loadMovies, loadMovie, loadTrending,
+                    loadMovie, loadTrending,
                     loadSearchMovie, loadMoviesWithGenres,
                     loadSimilarMovies, loadRecommendations
                 ),
@@ -165,7 +153,7 @@ export const movieSlice = createSlice({
             )
             .addMatcher(
                 isFulfilled(
-                    loadMovies, loadMovie, loadTrending,
+                    loadMovie, loadTrending,
                     loadSearchMovie, loadMoviesWithGenres,
                     loadSimilarMovies, loadRecommendations
                 ),
@@ -174,7 +162,7 @@ export const movieSlice = createSlice({
                     state.error = null;
                 }
             )
-            .addMatcher(isRejected(loadMovie, loadMovies, loadTrending, loadSearchMovie, loadMoviesWithGenres, loadSimilarMovies, loadRecommendations), (state, action) => {
+            .addMatcher(isRejected(loadMovie, loadTrending, loadSearchMovie, loadMoviesWithGenres, loadSimilarMovies, loadRecommendations), (state, action) => {
                 state.loadState = false;
                 if (typeof action.payload === 'string') {
                     state.error = action.payload;
@@ -189,7 +177,6 @@ export const movieSlice = createSlice({
 export const movieActions = {
     ...movieSlice.actions,
     loadMovie,
-    loadMovies,
     loadTrending,
     loadSearchMovie,
     loadMoviesWithGenres,

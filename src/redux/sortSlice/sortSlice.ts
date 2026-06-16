@@ -43,7 +43,7 @@ const loadSortedUpcoming = createAsyncThunk<IBaseTmbdModel, LoadSortedMoviesArgs
 
 
 
-export const filterSlice = createSlice({
+export const sortSlice = createSlice({
     name: "filterSlice",
     initialState,
     reducers: {},
@@ -82,7 +82,7 @@ export const filterSlice = createSlice({
 });
 
 export const filterActions = {
-    ...filterSlice.actions,
+    ...sortSlice.actions,
     loadSortedMovies,
     loadSortedUpcoming
 };

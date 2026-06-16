@@ -3,9 +3,11 @@ import {useAppSelector} from "../../redux/hooks/useAppSelector.ts";
 import {useAppDispatch} from "../../redux/hooks/useAppDispatch.ts";
 import {movieActions} from "../../redux/movieSlice/movieSlice.ts";
 import {MoviesListCardComponent} from "../movie-list-card/MoviesListCardComponent.tsx";
-import {Link, useParams, useSearchParams} from "react-router-dom";
+import {useParams, useSearchParams} from "react-router-dom";
 import {genreActions} from "../../redux/genreSlice/genreSlice.ts";
 import PaginationComponent from "../pagination/PaginationComponent.tsx";
+import '../../pages/movies-page-styles.css'
+import {Chip} from "@mui/material";
 
 
 export const MoviesWithGenresComponent = () => {
@@ -22,44 +24,66 @@ export const MoviesWithGenresComponent = () => {
         dispatch(genreActions.loadGenres())
     }, [dispatch]);
 
+    const currentMovies = moviesWithGenres[Number(id)] || [];
+
 
     return (
-        <main className='flex gap-10'>
-            {
-                loadState && <div className='text-2xl'>Loading...</div>
-            }
+        <main className='movies__main'>
             {error && (
                 <div className='text-red-500 text-xl'>
                     Error: {error}
                 </div>
             )}
-            <aside className='flex flex-col gap-2'>
-                {
-                    genres && genres.map(genre => (
 
-                        <Link to={`/movie/genre/${genre.id}`} key={genre.id}>{genre.name}</Link>
-
-                    ))
-                }
-            </aside>
-            <section>
-                <div className='grid grid-cols-4  gap-3 py-5 px-14'>
+            <section className='movies__content'>
+                <aside className='flex flex-col gap-2 pt-18'>
                     {
-                        (moviesWithGenres[Number(id)] || []).map(movie => (
-
-                            <MoviesListCardComponent movieItem={movie} key={movie.id}/>
-
-                        ))
-
-                    }
-
-                </div>
-                <div>
+                        genres && genres.map(genre => {
+                            const isSelected = Number(id) === genre.id
+                            return (
+                                <Chip key={genre.id}
+                                      label={genre.name}
+                                      component="a"
+                                      href={`/movie/genre/${genre.id}`}
+                                      variant={isSelected ? "filled" : "outlined"}
+                                      color="primary"
+                                      clickable
+                                      sx={{
+                                          '&.MuiChip-root:hover': {
+                                              bgcolor: isSelected ? "primary.dark" : "dimgray",
+                                          },
+                                      ...(!isSelected && {
+                                          '&.MuiChip-root': {
+                                              bgcolor: 'darkslategrey',
+                                              color: 'white'
+                                          }
+                                      })
+                                      }}/>)
+                        })}
+                </aside>
+                <div className='flex flex-col gap-4 items-center'>
                     {
-                        !loadState && totalPages > 0 && (
-                            <PaginationComponent totalPages={totalPages} currentPage={currentPage}/>
+                        genres && genres.map(genre =>
+                            Number(id) === genre.id ? <h1 className='movies__title'>{genre.name}</h1> : ''
                         )
                     }
+                    <ul className='grid grid-cols-5 gap-3'>
+                        {
+                            currentMovies.map(movie => (
+                                <li key={movie.id}><MoviesListCardComponent movieItem={movie}/></li>
+
+                            ))
+
+                        }
+
+                    </ul>
+                    <div>
+                        {
+                            !loadState && totalPages > 0 && (
+                                <PaginationComponent totalPages={totalPages} currentPage={currentPage}/>
+                            )
+                        }
+                    </div>
                 </div>
             </section>
         </main>

@@ -5,7 +5,7 @@ import {useEffect} from "react";
 import {MovieListComponentMain} from "../components/movie-list-main/MovieListComponentMain.tsx";
 import {SortComponent} from "../components/sort-component/SortComponent.tsx";
 import {sortHelper} from "../config/sortHelper.ts";
-import {filterActions} from "../redux/filterSlice/filterSlice.ts";
+import {filterActions} from "../redux/sortSlice/sortSlice.ts";
 import './movies-page-styles.css'
 
 export const PopularPage = () => {

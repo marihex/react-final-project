@@ -4,7 +4,7 @@ import {useAppSelector} from "../redux/hooks/useAppSelector.ts";
 import {useAppDispatch} from "../redux/hooks/useAppDispatch.ts";
 import {useEffect} from "react";
 import {movieActions} from "../redux/movieSlice/movieSlice.ts";
-import {filterActions} from "../redux/filterSlice/filterSlice.ts";
+import {filterActions} from "../redux/sortSlice/sortSlice.ts";
 
 export const HomePage = () => {
     const { trending, moviesWithGenres} = useAppSelector(state => state.movies);

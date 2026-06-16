@@ -2,7 +2,7 @@ import {baseUrl} from "../config/urls.ts";
 import options from "../config/apiConfig.ts";
 
 
-export const fetchData= async <T, >(url:string): Promise<T> => {
+export const fetchData = async <T, >(url: string): Promise<T> => {
     try {
         const response = await fetch(url, options)
         if (!response.ok) throw new Error(`${response.status} Failed to load`);
@@ -16,19 +16,16 @@ export const fetchData= async <T, >(url:string): Promise<T> => {
     }
 }
 
-export const getAllMovies = async <T, >(endpoint: string, pg: number | string): Promise<T> => {
-    return await fetchData(`${baseUrl}/${endpoint}?page=${pg}&region=UA&with_release_type=3`)
-}
 
 export const getUpcoming = async <T, >(pg: number | string, sortParam: string): Promise<T> => {
     const today = new Date();
-        const nextMonth = new Date();
-        nextMonth.setMonth(today.getMonth() + 3);
+    const nextMonth = new Date();
+    nextMonth.setMonth(today.getMonth() + 3);
 
-        const minDate = today.toISOString().split('T')[0];
-        const maxDate = nextMonth.toISOString().split('T')[0];
+    const minDate = today.toISOString().split('T')[0];
+    const maxDate = nextMonth.toISOString().split('T')[0];
 
-        const url = `https://api.themoviedb.org/3/discover/movie?region=UA&release_date.gte=${minDate}&release_date.lte=${maxDate}&with_release_type=3&page=${pg}&sort_by=${sortParam}`
+    const url = `https://api.themoviedb.org/3/discover/movie?region=UA&release_date.gte=${minDate}&release_date.lte=${maxDate}&with_release_type=3&page=${pg}&sort_by=${sortParam}`
     return await fetchData(url)
 }
 
@@ -40,12 +37,17 @@ export const getTrending = async <T, >(endpoint: string, timeWindow: string, pg:
     return await fetchData(`${baseUrl}${endpoint}/${timeWindow}?page=${pg}`)
 }
 
-export const getSimilarRecommendations = async <T, >( id: number | string, endpoint: string, pg: number | string): Promise<T> => {
+export const getSimilarRecommendations = async <T, >(id: number | string, endpoint: string, pg: number | string): Promise<T> => {
     return await fetchData(`${baseUrl}/movie/${id}${endpoint}?page=${pg}`)
 }
 
-export const  getByGenres = async <T, >(id: string | number, pg: number | string): Promise<T> => {
-    return await fetchData(`${baseUrl}/discover/movie?with_genres=${id}&page=${pg}&with_release_type=3`)
+export const getByGenres = async <T, >(id: string | number, pg: number | string): Promise<T> => {
+    const today = new Date();
+    const nextDate = new Date();
+    nextDate.setFullYear(today.getFullYear() + 1);
+
+    const maxDate = nextDate.toISOString().split('T')[0];
+    return await fetchData(`${baseUrl}/discover/movie?with_genres=${id}&page=${pg}&with_release_type=3&include_adult=false&release_date.lte=${maxDate}`)
 }
 
 export const getGenres = async <T, >(endpoint: string): Promise<T> => {
@@ -58,6 +60,12 @@ export const searchMovie = async <T, >(endpoint: string, query: string, pg: numb
 }
 
 export const getSorted = async <T, >(pg: number | string, sortParam: string): Promise<T> => {
-    return await fetchData(`${baseUrl}/discover/movie?page=${pg}&region=UA&with_release_type=3&sort_by=${sortParam}`)
+    const today = new Date();
+    const nextDate = new Date();
+    nextDate.setFullYear(today.getFullYear() + 1);
+
+    const maxDate = nextDate.toISOString().split('T')[0];
+
+    return await fetchData(`${baseUrl}/discover/movie?page=${pg}&region=UA&with_release_type=3&sort_by=${sortParam}&include_adult=false&release_date.lte=${maxDate}`)
 }
 
