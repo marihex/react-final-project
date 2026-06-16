@@ -1,5 +1,5 @@
 import type {IMovieCardModel} from "../../models/IMovieCardModel.ts";
-import {createAsyncThunk, createSlice, isRejected, type PayloadAction} from "@reduxjs/toolkit";
+import {createAsyncThunk, createSlice, isFulfilled, isPending, isRejected, type PayloadAction} from "@reduxjs/toolkit";
 import {
     getAllMovies,
     getByGenres,
@@ -10,6 +10,7 @@ import {
 } from "../../services/api.service.ts";
 import type {IBaseTmbdModel} from "../../models/IBaseTmbdModel.ts";
 import type {IMovieInfoModel} from "../../models/IMovieInfoModel.ts";
+import {loadData} from "../../config/thunkHelper.ts";
 
 type MovieSliceType = {
     movies: IMovieCardModel[],
@@ -57,109 +58,53 @@ interface FetchMoviesWithIdAndPg {
     id: string | number;
 }
 
-
 const loadMovies = createAsyncThunk(
     'loadMovies',
     async (page: number | string, thunkAPI) => {
-        try {
-            const movies = await getAllMovies<IBaseTmbdModel>('/discover/movie', page);
-            return movies;
-        } catch (error) {
-            if (error instanceof Error) {
-                return thunkAPI.rejectWithValue(error.message);
-            }
-            return thunkAPI.rejectWithValue('Unknown server error');
-        }
+        return await loadData(() => getAllMovies<IBaseTmbdModel>('/discover/movie', page), thunkAPI);
     }
 )
 
 const loadTrending = createAsyncThunk<IBaseTmbdModel, FetchTrendingArgs>(
     'loadTrending',
     async ({timeWindow, page}, thunkAPI) => {
-        try {
-            const trending = await getTrending<IBaseTmbdModel>('/trending/movie', timeWindow, page)
-            return trending
-        } catch (error) {
-            if (error instanceof Error) {
-                return thunkAPI.rejectWithValue(error.message);
-            }
-            return thunkAPI.rejectWithValue('Unknown server error');
-        }
+        return await loadData(() => getTrending<IBaseTmbdModel>('/trending/movie', timeWindow, page), thunkAPI);
     }
 )
 
 const loadMovie = createAsyncThunk(
     'loadMovie',
     async (id: string | number, thunkAPI) => {
-        try {
-            const movie = await getById<IMovieInfoModel>('/movie', id)
-            return movie
-        } catch (error) {
-            if (error instanceof Error) {
-                return thunkAPI.rejectWithValue(error.message);
-            }
-            return thunkAPI.rejectWithValue('Unknown server error');
-        }
+        return await loadData(() => getById<IMovieInfoModel>('/movie', id), thunkAPI);
     }
 )
 
 const loadSearchMovie = createAsyncThunk<IBaseTmbdModel, FetchSearchArg>(
     'searchMovie',
     async ({query, page}, thunkAPI) => {
-        try {
-            const search = await searchMovie<IBaseTmbdModel>('/search/movie', query, page)
-            return search
-        } catch (error) {
-            if (error instanceof Error) {
-                return thunkAPI.rejectWithValue(error.message);
-            }
-            return thunkAPI.rejectWithValue('Unknown server error');
-        }
-    }
-)
+
+        return await loadData(() => searchMovie<IBaseTmbdModel>('/search/movie', query, page), thunkAPI);
+    })
+
 
 const loadMoviesWithGenres = createAsyncThunk<IBaseTmbdModel, FetchMoviesWithIdAndPg>(
     'loadMoviesWithGenres',
     async ({id, page}, thunkAPI) => {
-        try {
-            const moviesWithGenres = await getByGenres<IBaseTmbdModel>( id, page);
-            return moviesWithGenres
-        } catch (error) {
-            if (error instanceof Error) {
-                return thunkAPI.rejectWithValue(error.message);
-            }
-            return thunkAPI.rejectWithValue('Unknown server error');
-        }
+        return await loadData(() => getByGenres<IBaseTmbdModel>(id, page), thunkAPI);
     }
 )
 
 const loadSimilarMovies = createAsyncThunk<IBaseTmbdModel, FetchMoviesWithIdAndPg>(
     'loadSimilarMovies',
     async ({id, page}, thunkAPI) => {
-        try {
-            const similar = await getSimilarRecommendations<IBaseTmbdModel>(id, '/similar',  page);
-            return similar
-        } catch (error) {
-            if (error instanceof Error) {
-                return thunkAPI.rejectWithValue(error.message);
-            }
-            return thunkAPI.rejectWithValue('Unknown server error');
-        }
+        return await loadData(() => getSimilarRecommendations<IBaseTmbdModel>(id, '/similar', page), thunkAPI);
     }
 )
 
 const loadRecommendations = createAsyncThunk<IBaseTmbdModel, FetchMoviesWithIdAndPg>(
     'loadRecommendations',
     async ({id, page}, thunkAPI) => {
-        try {
-            const similar = await getSimilarRecommendations<IBaseTmbdModel>(id, '/recommendations',  page);
-            return similar
-        } catch (error) {
-            if (error instanceof Error) {
-                return thunkAPI.rejectWithValue(error.message);
-            }
-            return thunkAPI.rejectWithValue('Unknown server error');
-        }
+        return await loadData(() => getSimilarRecommendations<IBaseTmbdModel>(id, '/recommendations', page), thunkAPI);
     }
 )
 
@@ -171,82 +116,64 @@ export const movieSlice = createSlice({
             state.loadState = action.payload;
         }
     },
-    extraReducers: builder =>
+    extraReducers: (builder) => {
         builder
-            .addCase(loadMovies.pending, (state) => {
-                state.loadState = true;
-                state.error = null
+            .addCase(loadSearchMovie.pending, (state) => {
+                state.noResults = false;
             })
+
             .addCase(loadMovies.fulfilled, (state, action: PayloadAction<IBaseTmbdModel>) => {
                 state.movies = action.payload.results;
-                state.loadState = false;
-                state.error = null;
                 state.totalPages = action.payload.total_pages;
                 state.totalResults = action.payload.total_results;
             })
-            .addCase(loadMovie.pending, (state) => {
-                state.loadState = true;
-                state.error = null
-            })
             .addCase(loadMovie.fulfilled, (state, action: PayloadAction<IMovieInfoModel>) => {
                 state.movie = action.payload;
-                state.loadState = false;
-                state.error = null;
-            })
-            .addCase(loadTrending.pending, (state) => {
-                state.loadState = true;
-                state.error = null;
             })
             .addCase(loadTrending.fulfilled, (state, action: PayloadAction<IBaseTmbdModel>) => {
-                state.loadState = false;
-                state.error = null;
                 state.trending = action.payload.results;
                 state.totalPages = action.payload.total_pages;
                 state.totalResults = action.payload.total_results;
             })
-            .addCase(loadSearchMovie.pending, (state) => {
-                state.loadState = true;
-                state.error = null;
-                state.noResults = false;
-            })
             .addCase(loadSearchMovie.fulfilled, (state, action: PayloadAction<IBaseTmbdModel>) => {
-                state.loadState = false;
-                state.error = null;
                 state.search = action.payload.results;
                 state.totalPages = action.payload.total_pages;
                 state.noResults = action.payload.results.length === 0;
             })
-            .addCase(loadMoviesWithGenres.pending, (state) => {
-                state.loadState = true;
-                state.error = null;
-            })
             .addCase(loadMoviesWithGenres.fulfilled, (state, action) => {
-                state.loadState = false;
-                state.error = null;
-                state.moviesWithGenres[Number(action.meta.arg.id)] = action.payload.results
+                state.moviesWithGenres[Number(action.meta.arg.id)] = action.payload.results;
                 state.totalPages = action.payload.total_pages;
-
-            })
-            .addCase(loadSimilarMovies.pending, (state) => {
-                state.loadState = true;
-                state.error = null;
             })
             .addCase(loadSimilarMovies.fulfilled, (state, action: PayloadAction<IBaseTmbdModel>) => {
-                state.loadState = false;
-                state.error = null;
                 state.similar = action.payload.results;
                 state.totalPages = action.payload.total_pages;
             })
-            .addCase(loadRecommendations.pending, (state) => {
-                state.loadState = true;
-                state.error = null;
-            })
             .addCase(loadRecommendations.fulfilled, (state, action: PayloadAction<IBaseTmbdModel>) => {
-                state.loadState = false;
-                state.error = null;
                 state.recommendations = action.payload.results;
                 state.totalPages = action.payload.total_pages;
             })
+            .addMatcher(
+                isPending(
+                    loadMovies, loadMovie, loadTrending,
+                    loadSearchMovie, loadMoviesWithGenres,
+                    loadSimilarMovies, loadRecommendations
+                ),
+                (state) => {
+                    state.loadState = true;
+                    state.error = null;
+                }
+            )
+            .addMatcher(
+                isFulfilled(
+                    loadMovies, loadMovie, loadTrending,
+                    loadSearchMovie, loadMoviesWithGenres,
+                    loadSimilarMovies, loadRecommendations
+                ),
+                (state) => {
+                    state.loadState = false;
+                    state.error = null;
+                }
+            )
             .addMatcher(isRejected(loadMovie, loadMovies, loadTrending, loadSearchMovie, loadMoviesWithGenres, loadSimilarMovies, loadRecommendations), (state, action) => {
                 state.loadState = false;
                 if (typeof action.payload === 'string') {
@@ -255,6 +182,7 @@ export const movieSlice = createSlice({
                     state.error = action.error.message || 'Server Error';
                 }
             })
+    }
 
 })
 

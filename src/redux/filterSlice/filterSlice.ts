@@ -1,7 +1,8 @@
-import {createAsyncThunk, createSlice, isRejected} from "@reduxjs/toolkit";
+import {createAsyncThunk, createSlice, isFulfilled, isPending, isRejected} from "@reduxjs/toolkit";
 import type {IMovieCardModel} from "../../models/IMovieCardModel.ts";
 import type {IBaseTmbdModel} from "../../models/IBaseTmbdModel.ts";
 import {getSorted, getUpcoming} from "../../services/api.service.ts";
+import {loadData} from "../../config/thunkHelper.ts";
 
 type FilterSliceType = {
     sortedMovies: IMovieCardModel[];
@@ -29,30 +30,14 @@ type LoadSortedMoviesArgs = {
 const loadSortedMovies = createAsyncThunk<IBaseTmbdModel, LoadSortedMoviesArgs>(
     'loadSortedMovies',
     async ({page, sort}, thunkAPI) => {
-        try {
-            const sortedMovie = await getSorted<IBaseTmbdModel>(page, sort);
-            return sortedMovie
-        } catch (error) {
-            if (error instanceof Error) {
-                return thunkAPI.rejectWithValue(error.message);
-            }
-            return thunkAPI.rejectWithValue('Unknown server error');
-        }
+        return await loadData(() => getSorted<IBaseTmbdModel>(page, sort), thunkAPI);
     }
 )
 
 const loadSortedUpcoming = createAsyncThunk<IBaseTmbdModel, LoadSortedMoviesArgs>(
     'loadSortedUpcoming',
     async ({page, sort}, thunkAPI) => {
-        try {
-            const sortedUpcomingMovie = await getUpcoming<IBaseTmbdModel>(page, sort);
-            return sortedUpcomingMovie
-        } catch (error) {
-            if (error instanceof Error) {
-                return thunkAPI.rejectWithValue(error.message);
-            }
-            return thunkAPI.rejectWithValue('Unknown server error');
-        }
+        return await loadData(() => getUpcoming<IBaseTmbdModel>(page, sort), thunkAPI)
     }
 )
 
@@ -64,32 +49,26 @@ export const filterSlice = createSlice({
     reducers: {},
     extraReducers: (builder) =>
         builder
-            .addCase(loadSortedMovies.pending, (state) => {
-                state.loadState = true;
-                state.error = null;
-            })
             .addCase(loadSortedMovies.fulfilled, (state, action) => {
                     state.sortedMovies = action.payload.results;
-                    state.totalPages = action.payload.total_pages;
-                    state.loadState = false;
-                    state.error = null;
-                    state.selected = action.meta.arg.sort
                 }
             )
-            .addCase(loadSortedUpcoming.pending, (state) => {
+            .addCase(loadSortedUpcoming.fulfilled, (state, action) => {
+                    state.sortedUpcoming = action.payload.results;
+                }
+            )
+            .addMatcher(isFulfilled(loadSortedMovies, loadSortedUpcoming), (state, action) => {
+                state.totalPages = action.payload.total_pages;
+                state.loadState = false;
+                state.error = null;
+                state.selected = action.meta.arg.sort
+            })
+            .addMatcher(isPending(loadSortedMovies, loadSortedUpcoming), (state) => {
                 state.loadState = true;
                 state.error = null;
             })
-            .addCase(loadSortedUpcoming.fulfilled, (state, action) => {
-                    state.sortedUpcoming = action.payload.results;
-                    state.totalPages = action.payload.total_pages;
-                    state.loadState = false;
-                    state.error = null;
-                    state.selected = action.meta.arg.sort
-                }
-            )
             .addMatcher(
-                isRejected(loadSortedMovies), (state, action) => {
+                isRejected(loadSortedMovies, loadSortedUpcoming), (state, action) => {
                     state.loadState = false;
 
                     if (typeof action.payload === "string") {

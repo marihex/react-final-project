@@ -3,10 +3,10 @@ import {useAppDispatch} from "../redux/hooks/useAppDispatch.ts";
 import {useSearchParams} from "react-router-dom";
 import {useEffect} from "react";
 import {MovieListComponentMain} from "../components/movie-list-main/MovieListComponentMain.tsx";
-import PaginationComponent from "../components/pagination/PaginationComponent.tsx";
 import {SortComponent} from "../components/sort-component/SortComponent.tsx";
 import {sortHelper} from "../config/sortHelper.ts";
 import {filterActions} from "../redux/filterSlice/filterSlice.ts";
+import './movies-page-styles.css'
 
 export const PopularPage = () => {
     const {sortedMovies, totalPages, loadState, error, selected} = useAppSelector(state => state.sorted)
@@ -29,20 +29,16 @@ export const PopularPage = () => {
                     Error: {error}
                 </div>
             )}
-            <main className='flex gap-5'>
+            <main className='movies__main'>
 
-                <aside className='flex flex-col gap-3'>
-                    <SortComponent/>
-                </aside>
-                <section>
-                    <h1>Popular movies</h1>
-                    <MovieListComponentMain movies={sortedMovies}/>
+                <h1 className='movies__title'>Popular movies</h1>
+               
+                <section className='movies__content'>
+                    <aside className='sort__container'>
+                        <SortComponent/>
+                    </aside>
                     <div>
-                        {
-                            !loadState && totalPages > 0 && (
-                                <PaginationComponent totalPages={totalPages} currentPage={currentPage}/>
-                            )
-                        }
+                        <MovieListComponentMain movies={sortedMovies} totalPages={totalPages} currentPage={currentPage} loadState={loadState} />
                     </div>
                 </section>
             </main>

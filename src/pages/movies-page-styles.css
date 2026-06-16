@@ -1,0 +1,32 @@
+.movies__main {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    width: 80%;
+    margin: 0 auto;
+    padding: 1.5rem 0;
+}
+
+.movies__content {
+    display: flex;
+    gap: 5rem;
+}
+
+.movies__title {
+    font-size: 2rem;
+    color: rgb(255 255 255 / 0.9);
+    letter-spacing: 0.03rem;
+}
+
+.sort__container {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    height: fit-content;
+    width: fit-content;
+    padding: 1rem 2rem;
+    border: 1px solid rgb(255 255 255 / 0.32);
+    border-radius: 1rem;
+    box-shadow: rgb(184 178 178 / 0.55) 0 0 5px;
+}
+

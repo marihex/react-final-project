@@ -2,10 +2,10 @@ import {useAppSelector} from "../redux/hooks/useAppSelector.ts";
 import {useAppDispatch} from "../redux/hooks/useAppDispatch.ts";
 import {useSearchParams} from "react-router-dom";
 import {useEffect} from "react";
-import PaginationComponent from "../components/pagination/PaginationComponent.tsx";
 import {MovieListComponentMain} from "../components/movie-list-main/MovieListComponentMain.tsx";
 import {filterActions} from "../redux/filterSlice/filterSlice.ts";
 import {SortComponent} from "../components/sort-component/SortComponent.tsx";
+import './movies-page-styles.css'
 
 export const UpcomingPage = () => {
     const {sortedUpcoming,selected, error, loadState, totalPages} = useAppSelector(state => state.sorted);
@@ -16,28 +16,23 @@ export const UpcomingPage = () => {
 
 
     return (
-        <main className='text-white flex gap-5'>
+        <main className='movies__main'>
             {error && (
                 <div className='text-red-500 text-xl'>
                     Error: {error}
                 </div>
             )}
 
-            <aside  className='flex flex-col gap-2'>
-                <SortComponent/>
-            </aside>
-            <section>
-                <h1>Upcoming movies</h1>
+            <h1 className='movies__title'>Upcoming movies</h1>
+
+            <section className='movies__content'>
+                <aside  className='sort__container'>
+                    <SortComponent/>
+                </aside>
                 <div>
-                    <MovieListComponentMain movies={sortedUpcoming}/>
+                    <MovieListComponentMain movies={sortedUpcoming} totalPages={totalPages} currentPage={currentPage} loadState={loadState} />
                 </div>
-                <div>
-                    {
-                        !loadState && totalPages > 1 && (
-                            <PaginationComponent totalPages={totalPages} currentPage={currentPage}/>
-                        )
-                    }
-                </div>
+
             </section>
         </main>
     );

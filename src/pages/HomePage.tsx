@@ -11,9 +11,9 @@ export const HomePage = () => {
     const {sortedUpcoming, sortedMovies} = useAppSelector(state => state.sorted)
     const dispatch = useAppDispatch();
     useEffect(() => {
-        // dispatch(movieActions.loadPopular(1));
+        dispatch(filterActions.loadSortedMovies({page: 1, sort: 'popularity.desc'} ));
         dispatch(movieActions.loadTrending({page: 1, timeWindow: 'week'}));
-        dispatch(filterActions.loadSortedUpcoming({page: 1, sort: 'primary_release_date.desc'}));
+        dispatch(filterActions.loadSortedUpcoming({page: 1, sort: 'popularity.desc'}));
         dispatch(movieActions.loadMoviesWithGenres({page: 1, id: 28}));
         dispatch(movieActions.loadMoviesWithGenres({page: 1, id: 12}));
         dispatch(movieActions.loadMoviesWithGenres({page: 1, id: 35}));
