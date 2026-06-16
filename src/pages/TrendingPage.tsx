@@ -32,8 +32,8 @@ export const TrendingPage = () => {
                     Error: {error}
                 </div>
             )}
-            <div className="max-w-[1400px] mx-auto px-4 sm:px-6 md:px-8">
-                <div className='flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-8'>
+            <div className="trending__container">
+                <div className='trending__header'>
                     <h1 className='movies__title'>Trending movies</h1>
                     <ToggleButtonGroup
                         color="secondary"

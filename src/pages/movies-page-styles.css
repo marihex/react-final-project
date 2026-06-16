@@ -30,3 +30,17 @@
     box-shadow: rgb(184 178 178 / 0.55) 0 0 5px;
 }
 
+.trending__container {
+    max-width: 1400px;
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: 1rem;
+    padding-right: 1rem;
+}
+
+.trending__header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 2rem;
+}
+
