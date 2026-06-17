@@ -14,10 +14,11 @@
 }
 
 .carousel-sm__nav {
+
     display: flex;
     justify-content: space-between;
     align-items: center;
-    width: clamp(20rem, 100%, 75rem);
+    width: clamp(20rem, 100%, 90rem);
     margin: 0 auto;
     padding: 0 1rem;
     color: white;

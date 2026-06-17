@@ -15,7 +15,7 @@ export const MovieListComponentMain: FC<MoviesListProps> = ({movies, totalPages,
     return (
 
         <div className='flex flex-col items-center gap-4'>
-            <div className='grid grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-4'>
+            <div className='grid grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-4 justify-items-center'>
                 {
                     movies.map(movie => <Link to={`/movie/${movie.id}`}><MoviesListCardComponent
                         movieItem={movie}

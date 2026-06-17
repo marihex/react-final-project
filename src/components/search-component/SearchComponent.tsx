@@ -38,7 +38,7 @@ export const SearchComponent = () => {
                     )
                 }
                     {!!search.length && (
-                        <div className="grid grid-cols-4 gap-5 px-20">
+                        <div className="grid grid-cols-5 gap-5 px-20">
                             {search.map(movie => (
                                 <Link to={`/movie/${movie.id}`}><MoviesListCardComponent
                                     key={movie.id}

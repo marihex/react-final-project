@@ -19,7 +19,7 @@ export const CarouselComponentMain = () => {
     const movieCarousel = trending.slice(0,6)
     const sizeUrl = imgSizeUrl["original"];
     return (
-        <section className='w-[60%] m-auto pt-4 overflow-hidden  rounded-lg'>
+        <section className='w-[73%] 2xl:w-[79%] m-auto pt-2 overflow-hidden  rounded-lg'>
             {
                 trending.length > 0 &&
                 <CCarousel controls indicators>

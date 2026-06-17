@@ -24,8 +24,8 @@ export const SortComponent = () => {
                     }
                     className={
                         selected === item.value
-                            ? "bg-purple-700/20 text-white border-purple-500 shadow-[0_0_10px_rgba(168,85,247,0.35)]"
-                            : "bg-[#0c0a0f] text-purple-400 border-purple-900/40 hover:border-purple-600 hover:text-purple-300"
+                            ? "bg-white/5 text-white border-white/20"
+                            : "bg-transparent text-zinc-400 border-white/10 hover:bg-white/5 hover:text-white/80 hover:border-white/20"
                     }
                 >
                     {item.label}

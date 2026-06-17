@@ -17,14 +17,14 @@ export const CarouselSmall: FC<SmallCarouselProps> = ({movies, movieCategory, en
     const moviesSliced = movies.slice(0, 18);
     const navigate = useNavigate();
 
-    const lastIndex = firstIndex + 6;
+    const lastIndex = firstIndex + 7;
     const moviesForCarousel = moviesSliced.slice(firstIndex, lastIndex);
     console.log(`${firstIndex} first index`);
     const clickHandler = () => {
-        setFirstIndex(firstIndex + 6)
+        setFirstIndex(firstIndex + 7)
     }
     const clickBackHandler = () => {
-        setFirstIndex(firstIndex - 6)
+        setFirstIndex(firstIndex - 7)
     }
 
     const seeAllHandle = () => {
@@ -37,11 +37,11 @@ export const CarouselSmall: FC<SmallCarouselProps> = ({movies, movieCategory, en
                 <h2>{movieCategory}</h2>
                 <div className='flex gap-3'>
                     {
-                    firstIndex > 5 &&
+                    firstIndex > 6 &&
                     <button onClick={() => clickBackHandler()}><KeyboardBackspaceIcon fontSize={"small"}/> Back</button>
 
                 }
-                    {lastIndex < movies.length - 6 ? (
+                    {lastIndex < movies.length - 7 ? (
                             <button onClick={() => clickHandler()} className='carousel-sm__btn'>More<ArrowRightAltIcon
                                 fontSize={"small"}/>
                             </button>) :
