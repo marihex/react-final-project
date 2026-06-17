@@ -15,7 +15,7 @@ export const CarouselComponentMain = () => {
     const dispatch = useAppDispatch();
     useEffect(() => {
         dispatch(movieActions.loadTrending({page: 1, timeWindow: 'week'}))
-    }, []);
+    }, [dispatch]);
     const movieCarousel = trending.slice(0,6)
     const sizeUrl = imgSizeUrl["original"];
     return (
@@ -24,7 +24,7 @@ export const CarouselComponentMain = () => {
                 trending.length > 0 &&
                 <CCarousel controls indicators>
                     {movieCarousel.map(movie =>
-                        <CCarouselItem className="hero-slide">
+                        <CCarouselItem className="hero-slide" key={movie.id}>
                             <Link to={`/movie/${movie.id}`}><CImage className="d-block w-100  rounded-lg"
                                        src={`${imgBaseUrl}${sizeUrl}${movie.backdrop_path}`}
                                        alt="slide 1"/></Link>
